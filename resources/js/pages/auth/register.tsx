@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { ArrowLeft, ArrowRight, LockKeyhole } from 'lucide-react';
 import InputError from '@/components/input-error';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
@@ -13,21 +14,29 @@ type Props = {
     passwordRules: string;
 };
 
+const fieldClassName =
+    'h-[53px] rounded-[5px] border-[#d7ccbd] bg-[#fcfaf7] px-4 text-[0.95rem] text-[#302a24] shadow-none placeholder:text-[#9b9186] focus-visible:border-[#b99257] focus-visible:ring-[#b99257]/15';
+
 export default function Register({ passwordRules }: Props) {
     return (
         <>
-            <Head title="Register" />
+            <Head title="Create your CMS account" />
             <Form
                 {...store.form()}
                 resetOnSuccess={['password', 'password_confirmation']}
                 disableWhileProcessing
-                className="flex flex-col gap-6"
+                className="flex flex-col"
             >
                 {({ processing, errors }) => (
                     <>
-                        <div className="grid gap-6">
+                        <div className="grid gap-5">
                             <div className="grid gap-2">
-                                <Label htmlFor="name">Name</Label>
+                                <Label
+                                    htmlFor="name"
+                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                >
+                                    Full Name
+                                </Label>
                                 <Input
                                     id="name"
                                     type="text"
@@ -36,16 +45,19 @@ export default function Register({ passwordRules }: Props) {
                                     tabIndex={1}
                                     autoComplete="name"
                                     name="name"
-                                    placeholder="Full name"
+                                    placeholder="Your full name"
+                                    className={fieldClassName}
                                 />
-                                <InputError
-                                    message={errors.name}
-                                    className="mt-2"
-                                />
+                                <InputError message={errors.name} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label
+                                    htmlFor="email"
+                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                >
+                                    Email Address
+                                </Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -53,13 +65,19 @@ export default function Register({ passwordRules }: Props) {
                                     tabIndex={2}
                                     autoComplete="email"
                                     name="email"
-                                    placeholder="email@example.com"
+                                    placeholder="admin@inivie.com"
+                                    className={fieldClassName}
                                 />
                                 <InputError message={errors.email} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password">Password</Label>
+                                <Label
+                                    htmlFor="password"
+                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                >
+                                    Password
+                                </Label>
                                 <PasswordInput
                                     id="password"
                                     required
@@ -68,13 +86,17 @@ export default function Register({ passwordRules }: Props) {
                                     name="password"
                                     placeholder="Password"
                                     passwordrules={passwordRules}
+                                    className={fieldClassName}
                                 />
                                 <InputError message={errors.password} />
                             </div>
 
                             <div className="grid gap-2">
-                                <Label htmlFor="password_confirmation">
-                                    Confirm password
+                                <Label
+                                    htmlFor="password_confirmation"
+                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                >
+                                    Confirm Password
                                 </Label>
                                 <PasswordInput
                                     id="password_confirmation"
@@ -84,6 +106,7 @@ export default function Register({ passwordRules }: Props) {
                                     name="password_confirmation"
                                     placeholder="Confirm password"
                                     passwordrules={passwordRules}
+                                    className={fieldClassName}
                                 />
                                 <InputError
                                     message={errors.password_confirmation}
@@ -92,21 +115,37 @@ export default function Register({ passwordRules }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-2 w-full"
+                                className="mt-2 h-[60px] rounded-[5px] bg-[#29231d] text-base text-white hover:bg-[#3a322a]"
                                 tabIndex={5}
+                                disabled={processing}
                                 data-test="register-user-button"
                             >
-                                {processing && <Spinner />}
-                                Create account
+                                {processing ? (
+                                    <Spinner />
+                                ) : (
+                                    <span className="w-4" />
+                                )}
+                                <span className="flex-1">Create Account</span>
+                                <ArrowRight className="size-5" />
                             </Button>
                         </div>
 
-                        <div className="text-center text-sm text-muted-foreground">
-                            Already have an account?{' '}
-                            <TextLink href={login()} tabIndex={6}>
-                                Log in
-                            </TextLink>
+                        <div className="mt-5 flex items-center justify-center gap-3 text-center text-[0.8rem] text-[#82786e]">
+                            <LockKeyhole className="size-4" />
+                            <span>
+                                Secure registration for authorized Ini Vie
+                                Hospitality staff.
+                            </span>
                         </div>
+
+                        <TextLink
+                            href={login()}
+                            tabIndex={6}
+                            className="mx-auto mt-6 flex w-fit items-center gap-3 text-sm font-medium text-[#a56f22] no-underline hover:text-[#825716]"
+                        >
+                            <ArrowLeft className="size-4" />
+                            Back to Sign In
+                        </TextLink>
                     </>
                 )}
             </Form>
@@ -115,6 +154,6 @@ export default function Register({ passwordRules }: Props) {
 }
 
 Register.layout = {
-    title: 'Create an account',
-    description: 'Enter your details below to create your account',
+    title: 'Create your CMS account',
+    description: 'Join the Ini Vie Hospitality content management workspace.',
 };
