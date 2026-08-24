@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class HomepageItemService
 {
-    public function __construct(private HomepageMediaService $media) {}
+    public function __construct(private HomepageMediaService $media, private HomepageWorkspaceContext $workspace) {}
 
     public function save(string $section, SaveItemRequest $request, ?int $item = null): void
     {
@@ -20,20 +20,22 @@ class HomepageItemService
         }
         unset($data['image']);
         $data['published_at'] = $data['status'] === 'published' ? now() : null;
+        $parentId = $this->workspace->root($definition['parent'])->value('id') ?? abort(404);
 
         if ($item !== null) {
-            abort_unless(DB::table($definition['table'])->where('id', $item)->exists(), 404);
-            DB::table($definition['table'])->where('id', $item)->update($data);
+            abort_unless(DB::table($definition['table'])->where('section_id', $parentId)->where('id', $item)->exists(), 404);
+            DB::table($definition['table'])->where('section_id', $parentId)->where('id', $item)->update($data);
 
             return;
         }
-        $data['section_id'] = DB::table($definition['parent'])->value('id') ?? abort(404);
+        $data['section_id'] = $parentId;
         DB::table($definition['table'])->insert($data + ['created_at' => now(), 'updated_at' => now()]);
     }
 
     public function delete(string $section, int $item): void
     {
         $definition = HomepageDefinitions::item($section);
-        abort_unless(DB::table($definition['table'])->where('id', $item)->delete() > 0, 404);
+        $parentId = $this->workspace->root($definition['parent'])->value('id') ?? abort(404);
+        abort_unless(DB::table($definition['table'])->where('section_id', $parentId)->where('id', $item)->delete() > 0, 404);
     }
 }

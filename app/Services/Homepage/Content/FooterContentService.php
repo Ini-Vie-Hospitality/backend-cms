@@ -2,16 +2,17 @@
 
 namespace App\Services\Homepage\Content;
 
+use App\Services\Homepage\HomepageWorkspaceContext;
 use Illuminate\Support\Facades\DB;
 
 class FooterContentService
 {
-    public function __construct(private ContentMedia $media) {}
+    public function __construct(private ContentMedia $media, private HomepageWorkspaceContext $workspace) {}
 
     /** @return array<string, mixed>|null */
     public function footer(): ?array
     {
-        $row = DB::table('homepage_footers')->where('status', 'published')->whereNotNull('published_at')->first();
+        $row = $this->workspace->visible($this->workspace->root('homepage_footers'))->first();
         if (! $row) {
             return null;
         }

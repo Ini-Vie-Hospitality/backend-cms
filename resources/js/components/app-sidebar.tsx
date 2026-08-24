@@ -6,12 +6,14 @@ import {
     CircleHelp,
     Crown,
     HeartPulse,
+    History,
     Hotel,
     LayoutGrid,
     Navigation,
     Newspaper,
     PanelBottom,
     Sparkles,
+    ScanEye,
     Utensils,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
@@ -63,6 +65,8 @@ const mainNavItems: NavItem[] = [
     { title: 'Featured In', href: '/cms/homepage/featured-in', icon: Award },
     { title: 'FAQ', href: '/cms/homepage/faq', icon: CircleHelp },
     { title: 'Footer', href: '/cms/homepage/footer', icon: PanelBottom },
+    { title: 'Preview', href: '/cms/homepage/preview', icon: ScanEye },
+    { title: 'Publish History', href: '/cms/homepage/history', icon: History },
 ];
 
 export function AppSidebar() {

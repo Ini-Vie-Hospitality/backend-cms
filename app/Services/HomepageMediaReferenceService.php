@@ -29,6 +29,14 @@ class HomepageMediaReferenceService
             }
         }
 
+        if (DB::getSchemaBuilder()->hasTable('homepage_publish_versions')) {
+            foreach (DB::table('homepage_publish_versions')->pluck('media_paths') as $paths) {
+                if (in_array($path, json_decode($paths ?? '[]', true) ?: [], true)) {
+                    return true;
+                }
+            }
+        }
+
         return false;
     }
 }

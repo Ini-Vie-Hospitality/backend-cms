@@ -1,11 +1,20 @@
 import { router } from '@inertiajs/react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select';
+import { membershipBenefitIcons } from './membership-benefit-icons';
+import type { MembershipBenefitIconKey } from './membership-benefit-icons';
 
 export type Benefit = {
     id: number;
     label: string;
-    icon: string;
+    icon: MembershipBenefitIconKey;
     sort_order: number;
     is_active: boolean;
 };
@@ -17,6 +26,14 @@ export function MembershipBenefitEditor({
     benefit?: Benefit;
     index: number;
 }) {
+    const [selectedIcon, setSelectedIcon] = useState<MembershipBenefitIconKey>(
+        benefit?.icon ?? 'diamond',
+    );
+    const selectedOption =
+        membershipBenefitIcons.find(({ value }) => value === selectedIcon) ??
+        membershipBenefitIcons[0];
+    const SelectedIcon = selectedOption.icon;
+
     function save(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -43,16 +60,30 @@ export function MembershipBenefitEditor({
                 placeholder="Benefit label"
                 defaultValue={benefit?.label}
             />
-            <select
-                name="icon"
-                defaultValue={benefit?.icon ?? 'diamond'}
-                className="h-10 rounded-md border border-input bg-card outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/12"
+            <input type="hidden" name="icon" value={selectedIcon} />
+            <Select
+                value={selectedIcon}
+                onValueChange={(value) =>
+                    setSelectedIcon(value as MembershipBenefitIconKey)
+                }
             >
-                <option value="diamond">Diamond</option>
-                <option value="gift">Gift</option>
-                <option value="shopping-bag">Shopping bag</option>
-                <option value="tags">Tags</option>
-            </select>
+                <SelectTrigger className="w-full">
+                    <span className="flex items-center gap-2">
+                        <SelectedIcon className="size-4" aria-hidden="true" />
+                        {selectedOption.label}
+                    </span>
+                </SelectTrigger>
+                <SelectContent>
+                    {membershipBenefitIcons.map(
+                        ({ value, label, icon: Icon }) => (
+                            <SelectItem key={value} value={value}>
+                                <Icon className="size-4" aria-hidden="true" />
+                                <span>{label}</span>
+                            </SelectItem>
+                        ),
+                    )}
+                </SelectContent>
+            </Select>
             <Input
                 name="sort_order"
                 type="number"
