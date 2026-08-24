@@ -2,11 +2,12 @@
 
 namespace App\Services\Homepage\Content;
 
+use App\Services\Homepage\HomepageWorkspaceContext;
 use Illuminate\Support\Facades\DB;
 
 class NavigationContentService
 {
-    public function __construct(private ContentMedia $media) {}
+    public function __construct(private ContentMedia $media, private HomepageWorkspaceContext $workspace) {}
 
     /** @return array<string, mixed>|null */
     public function navbar(): ?array
@@ -35,6 +36,6 @@ class NavigationContentService
 
     private function publishedRow(string $table): ?\stdClass
     {
-        return DB::table($table)->where('status', 'published')->whereNotNull('published_at')->first();
+        return $this->workspace->visible($this->workspace->root($table))->first();
     }
 }

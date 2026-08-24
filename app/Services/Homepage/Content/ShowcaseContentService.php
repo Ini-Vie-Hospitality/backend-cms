@@ -2,11 +2,12 @@
 
 namespace App\Services\Homepage\Content;
 
+use App\Services\Homepage\HomepageWorkspaceContext;
 use Illuminate\Support\Facades\DB;
 
 class ShowcaseContentService
 {
-    public function __construct(private ContentMedia $media) {}
+    public function __construct(private ContentMedia $media, private HomepageWorkspaceContext $workspace) {}
 
     /** @return array<string, mixed>|null */
     public function featuredProperties(): ?array
@@ -43,7 +44,7 @@ class ShowcaseContentService
      */
     private function collectionSection(string $sectionTable, string $itemTable, callable $transform, array $aliases = []): ?array
     {
-        $row = DB::table($sectionTable)->where('status', 'published')->whereNotNull('published_at')->first();
+        $row = $this->workspace->visible($this->workspace->root($sectionTable))->first();
         if (! $row) {
             return null;
         }
@@ -52,7 +53,7 @@ class ShowcaseContentService
         foreach ($aliases as $target => $source) {
             $result[$target] = $row->{$source};
         }
-        $result['items'] = DB::table($itemTable)->where('section_id', $row->id)->where('status', 'published')->whereNotNull('published_at')->orderBy('sort_order')->orderBy('id')->get()->map($transform)->all();
+        $result['items'] = $this->workspace->visible(DB::table($itemTable)->where('section_id', $row->id))->orderBy('sort_order')->orderBy('id')->get()->map($transform)->all();
 
         return $result;
     }

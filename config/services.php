@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'homepage' => [
+        'frontend_url' => env('FRONTEND_WEB_URL', 'http://localhost:3000'),
+        'preview_secret' => env('HOMEPAGE_PREVIEW_SECRET'),
+        'revalidate_url' => env('FRONTEND_REVALIDATE_URL'),
+        'revalidate_secret' => env('FRONTEND_REVALIDATE_SECRET'),
+    ],
+
 ];

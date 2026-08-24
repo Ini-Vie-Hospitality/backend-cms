@@ -12,9 +12,17 @@ use App\Http\Controllers\Homepage\OurStoryController;
 use App\Http\Controllers\Homepage\SpecialOffersController;
 use App\Http\Controllers\Homepage\WellnessController;
 use App\Http\Controllers\Homepage\WhatsNewController;
+use App\Http\Controllers\Homepage\WorkspaceController;
+use App\Http\Middleware\ResolveHomepageWorkspace;
+use App\Http\Middleware\RevalidatePublishedHomepage;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'verified'])->prefix('cms/homepage')->name('homepage.')->group(function (): void {
+Route::middleware(['auth', 'verified', ResolveHomepageWorkspace::class, RevalidatePublishedHomepage::class])->prefix('cms/homepage')->name('homepage.')->group(function (): void {
+    Route::put('workspace', [WorkspaceController::class, 'update'])->name('workspace.update');
+    Route::get('preview', [WorkspaceController::class, 'preview'])->name('preview');
+    Route::post('import-draft', [WorkspaceController::class, 'import'])->name('import-draft');
+    Route::get('history', [WorkspaceController::class, 'history'])->name('history');
+    Route::post('history/{version}/rollback', [WorkspaceController::class, 'rollback'])->name('history.rollback');
     Route::get('navbar', [NavbarController::class, 'edit'])->name('navbar.edit');
     Route::put('navbar', [NavbarController::class, 'update'])->name('navbar.update');
     Route::post('navbar/links', [NavbarController::class, 'saveLink'])->name('navbar.links.store');

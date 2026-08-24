@@ -10,13 +10,13 @@ use Illuminate\Support\Facades\DB;
 
 class HomepageSectionService
 {
-    public function __construct(private HomepageMediaService $media) {}
+    public function __construct(private HomepageMediaService $media, private HomepageWorkspaceContext $workspace) {}
 
     public function update(string $section, UpdateSectionRequest $request): void
     {
         $definition = HomepageDefinitions::section($section);
         $data = $request->validated();
-        $row = DB::table($definition['table'])->firstOrFail();
+        $row = $this->workspace->root($definition['table'])->firstOrFail();
 
         foreach ($definition['media'] as $field => $type) {
             if ($request->hasFile($field)) {
@@ -31,7 +31,7 @@ class HomepageSectionService
     public function updateNavbar(UpdateNavbarRequest $request): void
     {
         $data = $request->validated();
-        $row = DB::table('homepage_navbars')->firstOrFail();
+        $row = $this->workspace->root('homepage_navbars')->firstOrFail();
         if ($request->hasFile('logo')) {
             $data['logo_path'] = $this->media->store($request->file('logo'));
         }

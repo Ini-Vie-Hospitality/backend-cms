@@ -3,6 +3,8 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -42,6 +44,10 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'homepageWorkspace' => Schema::hasTable('homepage_workspace_state') ? [
+                'mode' => DB::table('homepage_workspace_state')->value('editing_mode') ?? 'published',
+                'updatedAt' => DB::table('homepage_workspace_state')->value('updated_at'),
+            ] : null,
         ];
     }
 }

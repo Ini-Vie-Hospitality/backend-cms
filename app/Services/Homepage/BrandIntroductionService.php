@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\DB;
 
 class BrandIntroductionService
 {
-    public function __construct(private HomepageMediaService $media) {}
+    public function __construct(private HomepageMediaService $media, private HomepageWorkspaceContext $workspace) {}
 
     public function update(UpdateBrandIntroductionRequest $request): void
     {
         $data = $request->validated();
-        $record = DB::table('homepage_brand_introductions')->firstOrFail();
+        $record = $this->workspace->root('homepage_brand_introductions')->firstOrFail();
 
         DB::transaction(function () use ($data, $record, $request): void {
             DB::table('homepage_brand_introductions')->where('id', $record->id)->update(['title' => $data['title'], 'quote' => $data['quote'], 'status' => $data['status'], 'published_at' => $data['status'] === 'published' ? now() : null]);

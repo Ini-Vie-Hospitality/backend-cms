@@ -18,6 +18,18 @@ test('guests cannot manage homepage content', function () {
     $this->get('/cms/homepage/navbar')->assertRedirect('/login');
 });
 
+test('homepage preview uses the configured frontend origin', function () {
+    config(['services.homepage.frontend_url' => 'http://localhost:3000']);
+
+    $this->actingAs(User::factory()->create())
+        ->get('/cms/homepage/preview')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('homepage/preview')
+            ->where('publishedUrl', 'http://localhost:3000/')
+            ->where('draftUrl', fn ($url) => str_starts_with($url, 'http://localhost:3000/preview?expires=')));
+});
+
 test('each section renders its own inertia page through the default layout', function () {
     $user = User::factory()->create();
     foreach (['navbar' => 'navbar/edit', 'brand-introduction' => 'brand-introduction/edit', 'featured-properties' => 'featured-properties/index', 'culinary' => 'culinary/index', 'wellness' => 'wellness/index', 'membership' => 'membership/edit', 'our-story' => 'our-story/edit', 'special-offers' => 'special-offers/edit', 'whats-new' => 'whats-new/index', 'featured-in' => 'featured-in/index', 'faq' => 'faq/index', 'footer' => 'footer/edit'] as $uri => $component) {

@@ -2,11 +2,12 @@
 
 namespace App\Services\Homepage\Content;
 
+use App\Services\Homepage\HomepageWorkspaceContext;
 use Illuminate\Support\Facades\DB;
 
 class EditorialContentService
 {
-    public function __construct(private ContentMedia $media) {}
+    public function __construct(private ContentMedia $media, private HomepageWorkspaceContext $workspace) {}
 
     /** @return array<string, mixed>|null */
     public function membership(): ?array
@@ -27,7 +28,7 @@ class EditorialContentService
         if (! $row) {
             return null;
         }
-        $blocks = DB::table('homepage_story_blocks')->where('section_id', $row->id)->where('status', 'published')->whereNotNull('published_at')->orderBy('slot')->get()->map(fn ($item) => ['title' => $item->title, 'description' => $item->description, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'cta' => $item->cta_label, 'href' => $item->href])->all();
+        $blocks = $this->workspace->visible(DB::table('homepage_story_blocks')->where('section_id', $row->id))->orderBy('slot')->get()->map(fn ($item) => ['title' => $item->title, 'description' => $item->description, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'cta' => $item->cta_label, 'href' => $item->href])->all();
 
         return count($blocks) === 4 ? ['title' => $row->title, 'description' => $row->description, 'blocks' => $blocks] : null;
     }
@@ -39,7 +40,7 @@ class EditorialContentService
         if (! $row) {
             return null;
         }
-        $items = DB::table('homepage_special_offers')->where('section_id', $row->id)->where('status', 'published')->whereNotNull('published_at')->orderBy('slot')->get()->map(fn ($item) => ['id' => $item->display_number, 'category' => $item->category, 'title' => $item->title, 'description' => $item->description, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'href' => $item->href])->all();
+        $items = $this->workspace->visible(DB::table('homepage_special_offers')->where('section_id', $row->id))->orderBy('slot')->get()->map(fn ($item) => ['id' => $item->display_number, 'category' => $item->category, 'title' => $item->title, 'description' => $item->description, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'href' => $item->href])->all();
 
         return count($items) === 3 ? ['eyebrow' => $row->eyebrow, 'title' => $row->title, 'description' => $row->description, 'allOffers' => ['label' => $row->all_offers_label, 'href' => $row->all_offers_href], 'items' => $items] : null;
     }
@@ -51,7 +52,7 @@ class EditorialContentService
         if (! $row) {
             return null;
         }
-        $items = DB::table('homepage_journal_stories')->where('section_id', $row->id)->where('status', 'published')->whereNotNull('published_at')->orderBy('sort_order')->orderBy('id')->get()->map(fn ($item) => ['id' => $item->external_key, 'category' => $item->category, 'title' => DB::table('homepage_journal_story_title_lines')->where('story_id', $item->id)->orderBy('line_number')->pluck('text')->all(), 'description' => $item->description, 'readingTime' => $item->reading_time, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'href' => $item->href])->all();
+        $items = $this->workspace->visible(DB::table('homepage_journal_stories')->where('section_id', $row->id))->orderBy('sort_order')->orderBy('id')->get()->map(fn ($item) => ['id' => $item->external_key, 'category' => $item->category, 'title' => DB::table('homepage_journal_story_title_lines')->where('story_id', $item->id)->orderBy('line_number')->pluck('text')->all(), 'description' => $item->description, 'readingTime' => $item->reading_time, 'image' => $this->media->url($item->image_path), 'alt' => $item->image_alt, 'href' => $item->href])->all();
 
         return ['eyebrow' => $row->eyebrow, 'title' => $row->title, 'description' => $row->description, 'explore' => ['label' => $row->explore_label, 'href' => $row->explore_href], 'readLabel' => $row->read_label, 'items' => $items];
     }
@@ -64,11 +65,11 @@ class EditorialContentService
             return null;
         }
 
-        return ['title' => $row->title, 'items' => DB::table('homepage_featured_in_logos')->where('section_id', $row->id)->where('status', 'published')->whereNotNull('published_at')->orderBy('sort_order')->get()->map(fn ($item) => ['src' => $this->media->url($item->image_path), 'alt' => $item->image_alt])->all()];
+        return ['title' => $row->title, 'items' => $this->workspace->visible(DB::table('homepage_featured_in_logos')->where('section_id', $row->id))->orderBy('sort_order')->get()->map(fn ($item) => ['src' => $this->media->url($item->image_path), 'alt' => $item->image_alt])->all()];
     }
 
     private function publishedRow(string $table): ?\stdClass
     {
-        return DB::table($table)->where('status', 'published')->whereNotNull('published_at')->first();
+        return $this->workspace->visible($this->workspace->root($table))->first();
     }
 }

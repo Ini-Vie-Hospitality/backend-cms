@@ -7,16 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 class HomepagePageService
 {
+    public function __construct(private HomepageWorkspaceContext $workspace) {}
+
     /** @return array<string, mixed> */
     public function navbar(): array
     {
-        return ['record' => DB::table('homepage_navbars')->first(), 'links' => DB::table('homepage_navbar_links')->orderBy('audience')->orderBy('sort_order')->get()];
+        $record = $this->workspace->root('homepage_navbars')->firstOrFail();
+
+        return ['record' => $record, 'links' => DB::table('homepage_navbar_links')->where('navbar_id', $record->id)->orderBy('audience')->orderBy('sort_order')->get()];
     }
 
     /** @return array<string, mixed> */
     public function brandIntroduction(): array
     {
-        $record = DB::table('homepage_brand_introductions')->firstOrFail();
+        $record = $this->workspace->root('homepage_brand_introductions')->firstOrFail();
         $words = DB::table('homepage_brand_introduction_words')->orderBy('slot')->pluck('text')->all();
         $paragraphs = DB::table('homepage_brand_introduction_paragraphs')->orderBy('slot')->pluck('body')->all();
         $images = DB::table('homepage_brand_introduction_images')->orderBy('slot')->get();
@@ -28,7 +32,8 @@ class HomepagePageService
     public function section(string $section): array
     {
         $definition = HomepageDefinitions::section($section);
-        $props = ['record' => DB::table($definition['table'])->first()];
+        $record = $this->workspace->root($definition['table'])->firstOrFail();
+        $props = ['record' => $record];
         $relations = [
             'featured-properties' => ['items', 'homepage_featured_properties', 'sort_order'], 'culinary' => ['items', 'homepage_culinary_destinations', 'sort_order'],
             'wellness' => ['items', 'homepage_wellness_escapes', 'sort_order'], 'membership' => ['benefits', 'homepage_membership_benefits', 'sort_order'],
@@ -38,13 +43,14 @@ class HomepagePageService
         ];
         if (isset($relations[$section])) {
             [$key, $table, $order] = $relations[$section];
-            $props[$key] = DB::table($table)->orderBy($order)->get();
+            $foreignKey = in_array($table, ['homepage_membership_benefits'], true) ? 'membership_id' : (in_array($table, ['homepage_footer_contacts'], true) ? 'footer_id' : 'section_id');
+            $props[$key] = DB::table($table)->where($foreignKey, $record->id)->orderBy($order)->get();
         }
         if ($section === 'wellness') {
-            $props['categories'] = DB::table('homepage_wellness_categories')->orderBy('name')->get();
+            $props['categories'] = $this->workspace->root('homepage_wellness_categories')->orderBy('name')->get();
         }
         if ($section === 'footer') {
-            $props['socials'] = DB::table('homepage_footer_socials')->orderBy('sort_order')->get();
+            $props['socials'] = DB::table('homepage_footer_socials')->where('footer_id', $record->id)->orderBy('sort_order')->get();
         }
 
         return $props;
@@ -52,7 +58,9 @@ class HomepagePageService
 
     public function item(string $section, int $item): \stdClass
     {
-        $record = DB::table(HomepageDefinitions::item($section)['table'])->where('id', $item)->first();
+        $definition = HomepageDefinitions::item($section);
+        $parentId = $this->workspace->root($definition['parent'])->value('id');
+        $record = DB::table($definition['table'])->where('section_id', $parentId)->where('id', $item)->first();
         if ($record === null) {
             abort(404);
         }
