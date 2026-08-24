@@ -11,6 +11,6 @@ class FeaturedPropertyItem extends HomepageItemModel
     /** @return BelongsTo<FeaturedProperty, $this> */
     public function featuredProperty(): BelongsTo
     {
-        return $this->belongsTo(FeaturedProperty::class, 'homepage_featured_property_id');
+        return $this->belongsTo(FeaturedProperty::class, 'section_id');
     }
 }

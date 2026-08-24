@@ -11,6 +11,6 @@ class Culinary extends HomepageModel
     /** @return HasMany<CulinaryItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(CulinaryItem::class, 'homepage_culinary_id');
+        return $this->hasMany(CulinaryItem::class, 'section_id');
     }
 }

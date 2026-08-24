@@ -11,6 +11,6 @@ class SpecialOffer extends HomepageModel
     /** @return HasMany<SpecialOfferItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(SpecialOfferItem::class, 'homepage_special_offer_id');
+        return $this->hasMany(SpecialOfferItem::class, 'section_id');
     }
 }

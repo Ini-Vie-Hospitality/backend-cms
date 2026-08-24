@@ -11,6 +11,6 @@ class SpecialOfferItem extends HomepageItemModel
     /** @return BelongsTo<SpecialOffer, $this> */
     public function specialOffer(): BelongsTo
     {
-        return $this->belongsTo(SpecialOffer::class, 'homepage_special_offer_id');
+        return $this->belongsTo(SpecialOffer::class, 'section_id');
     }
 }

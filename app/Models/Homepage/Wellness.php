@@ -11,6 +11,6 @@ class Wellness extends HomepageModel
     /** @return HasMany<WellnessItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(WellnessItem::class, 'homepage_wellness_id');
+        return $this->hasMany(WellnessItem::class, 'section_id');
     }
 }

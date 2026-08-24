@@ -11,6 +11,6 @@ class WhatsNewItem extends HomepageItemModel
     /** @return BelongsTo<WhatsNew, $this> */
     public function whatsNew(): BelongsTo
     {
-        return $this->belongsTo(WhatsNew::class, 'homepage_whats_new_id');
+        return $this->belongsTo(WhatsNew::class, 'section_id');
     }
 }

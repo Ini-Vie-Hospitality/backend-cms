@@ -11,6 +11,6 @@ class FeaturedInItem extends HomepageItemModel
     /** @return BelongsTo<FeaturedIn, $this> */
     public function featuredIn(): BelongsTo
     {
-        return $this->belongsTo(FeaturedIn::class, 'homepage_featured_in_id');
+        return $this->belongsTo(FeaturedIn::class, 'section_id');
     }
 }

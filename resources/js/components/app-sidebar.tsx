@@ -1,5 +1,21 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import {
+    Award,
+    BadgePercent,
+    BookHeart,
+    BookOpen,
+    CircleHelp,
+    Crown,
+    FolderGit2,
+    HeartPulse,
+    Hotel,
+    LayoutGrid,
+    Navigation,
+    Newspaper,
+    PanelBottom,
+    Sparkles,
+    Utensils,
+} from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -18,12 +34,38 @@ import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
-    ...[
-        ['Navbar', 'navbar'], ['Brand Introduction', 'brand-introduction'], ['Featured Properties', 'featured-properties'],
-        ['Culinary Journey', 'culinary'], ['Wellness Harmony', 'wellness'], ['Membership', 'membership'],
-        ['Our Story', 'our-story'], ['Special Offers', 'special-offers'], ["What's New", 'whats-new'],
-        ['Featured In', 'featured-in'], ['FAQ', 'faq'], ['Footer', 'footer'],
-    ].map(([title, key]) => ({ title, href: `/cms/homepage/${key}`, icon: LayoutGrid })),
+    { title: 'Navbar', href: '/cms/homepage/navbar', icon: Navigation },
+    {
+        title: 'Brand Introduction',
+        href: '/cms/homepage/brand-introduction',
+        icon: Sparkles,
+    },
+    {
+        title: 'Featured Properties',
+        href: '/cms/homepage/featured-properties',
+        icon: Hotel,
+    },
+    {
+        title: 'Culinary Journey',
+        href: '/cms/homepage/culinary',
+        icon: Utensils,
+    },
+    {
+        title: 'Wellness Harmony',
+        href: '/cms/homepage/wellness',
+        icon: HeartPulse,
+    },
+    { title: 'Membership', href: '/cms/homepage/membership', icon: Crown },
+    { title: 'Our Story', href: '/cms/homepage/our-story', icon: BookHeart },
+    {
+        title: 'Special Offers',
+        href: '/cms/homepage/special-offers',
+        icon: BadgePercent,
+    },
+    { title: "What's New", href: '/cms/homepage/whats-new', icon: Newspaper },
+    { title: 'Featured In', href: '/cms/homepage/featured-in', icon: Award },
+    { title: 'FAQ', href: '/cms/homepage/faq', icon: CircleHelp },
+    { title: 'Footer', href: '/cms/homepage/footer', icon: PanelBottom },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -53,11 +95,9 @@ export function AppSidebar() {
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarHeader>
-
             <SidebarContent>
                 <NavMain items={mainNavItems} />
             </SidebarContent>
-
             <SidebarFooter>
                 <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />

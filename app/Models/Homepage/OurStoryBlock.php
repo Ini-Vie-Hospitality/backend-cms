@@ -11,6 +11,6 @@ class OurStoryBlock extends HomepageItemModel
     /** @return BelongsTo<OurStory, $this> */
     public function ourStory(): BelongsTo
     {
-        return $this->belongsTo(OurStory::class, 'homepage_our_story_id');
+        return $this->belongsTo(OurStory::class, 'section_id');
     }
 }

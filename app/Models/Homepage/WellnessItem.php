@@ -11,6 +11,6 @@ class WellnessItem extends HomepageItemModel
     /** @return BelongsTo<Wellness, $this> */
     public function wellness(): BelongsTo
     {
-        return $this->belongsTo(Wellness::class, 'homepage_wellness_id');
+        return $this->belongsTo(Wellness::class, 'section_id');
     }
 }

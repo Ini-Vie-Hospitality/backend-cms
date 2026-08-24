@@ -11,6 +11,6 @@ class WhatsNew extends HomepageModel
     /** @return HasMany<WhatsNewItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(WhatsNewItem::class, 'homepage_whats_new_id');
+        return $this->hasMany(WhatsNewItem::class, 'section_id');
     }
 }

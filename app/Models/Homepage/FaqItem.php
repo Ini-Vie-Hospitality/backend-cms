@@ -11,6 +11,6 @@ class FaqItem extends HomepageItemModel
     /** @return BelongsTo<Faq, $this> */
     public function faq(): BelongsTo
     {
-        return $this->belongsTo(Faq::class, 'homepage_faq_id');
+        return $this->belongsTo(Faq::class, 'section_id');
     }
 }

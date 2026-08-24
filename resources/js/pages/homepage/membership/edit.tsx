@@ -1,1 +1,45 @@
-import { StructuredForm } from '@/components/homepage/structured-form';import { Button } from '@/components/ui/button';import { Input } from '@/components/ui/input';import { router } from '@inertiajs/react';type Benefit={id:number;label:string;icon:string;sort_order:number;is_active:boolean};export default function MembershipEdit({record,benefits=[]}:{record:Record<string,string>;benefits:Benefit[]}){function save(e:React.FormEvent<HTMLFormElement>,id?:number){e.preventDefault();const d=new FormData(e.currentTarget);d.set('is_active',d.get('is_active')?'1':'0');if(id)d.set('_method','PUT');router.post(`/cms/homepage/membership/benefits${id?`/${id}`:''}`,d)}return <><StructuredForm title="Membership" action="/cms/homepage/membership" record={record} fields={[{name:'title',label:'Title'},{name:'subtitle',label:'Subtitle'},{name:'description',label:'Description',type:'textarea'},{name:'video',label:'Background video',type:'file'},{name:'primary_label',label:'Primary CTA label'},{name:'primary_href',label:'Primary CTA redirect'},{name:'secondary_label',label:'Secondary CTA label'},{name:'secondary_href',label:'Secondary CTA redirect'}]}/><div className="mx-auto max-w-4xl space-y-3 p-6"><h2 className="text-xl font-semibold">Membership Benefits</h2>{[...benefits,undefined].map((b,i)=><form key={b?.id??'new'} onSubmit={e=>save(e,b?.id)} className="grid gap-3 rounded-md border p-4 md:grid-cols-4"><Input name="label" placeholder="Benefit label" defaultValue={b?.label}/><select name="icon" defaultValue={b?.icon??'diamond'} className="h-10 rounded-md border bg-background"><option value="diamond">Diamond</option><option value="gift">Gift</option><option value="shopping-bag">Shopping bag</option><option value="tags">Tags</option></select><Input name="sort_order" type="number" defaultValue={b?.sort_order??i}/><div><label className="mr-3"><input name="is_active" type="checkbox" defaultChecked={b?.is_active??true}/> Active</label><Button>{b?'Save':'Add'}</Button>{b&&<button type="button" className="ml-2 text-destructive" onClick={()=>router.delete(`/cms/homepage/membership/benefits/${b.id}`)}>Delete</button>}</div></form>)}</div></>}
+import { StructuredForm } from '@/components/homepage/structured-form';
+import { MembershipBenefitEditor } from './benefit-editor';
+import type { Benefit } from './benefit-editor';
+
+export default function MembershipEdit({
+    record,
+    benefits = [],
+}: {
+    record: Record<string, string>;
+    benefits: Benefit[];
+}) {
+    return (
+        <>
+            <StructuredForm
+                title="Membership"
+                action="/cms/homepage/membership"
+                record={record}
+                fields={[
+                    { name: 'title', label: 'Title' },
+                    { name: 'subtitle', label: 'Subtitle' },
+                    {
+                        name: 'description',
+                        label: 'Description',
+                        type: 'textarea',
+                    },
+                    { name: 'video', label: 'Background video', type: 'file' },
+                    { name: 'primary_label', label: 'Primary CTA label' },
+                    { name: 'primary_href', label: 'Primary CTA redirect' },
+                    { name: 'secondary_label', label: 'Secondary CTA label' },
+                    { name: 'secondary_href', label: 'Secondary CTA redirect' },
+                ]}
+            />
+            <div className="mx-auto max-w-4xl space-y-3 p-6">
+                <h2 className="text-xl font-semibold">Membership Benefits</h2>
+                {[...benefits, undefined].map((benefit, index) => (
+                    <MembershipBenefitEditor
+                        key={benefit?.id ?? 'new'}
+                        benefit={benefit}
+                        index={index}
+                    />
+                ))}
+            </div>
+        </>
+    );
+}

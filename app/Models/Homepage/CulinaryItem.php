@@ -11,6 +11,6 @@ class CulinaryItem extends HomepageItemModel
     /** @return BelongsTo<Culinary, $this> */
     public function culinary(): BelongsTo
     {
-        return $this->belongsTo(Culinary::class, 'homepage_culinary_id');
+        return $this->belongsTo(Culinary::class, 'section_id');
     }
 }

@@ -11,6 +11,6 @@ class Faq extends HomepageModel
     /** @return HasMany<FaqItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(FaqItem::class, 'homepage_faq_id');
+        return $this->hasMany(FaqItem::class, 'section_id');
     }
 }

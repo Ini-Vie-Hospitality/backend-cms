@@ -11,6 +11,6 @@ class OurStory extends HomepageModel
     /** @return HasMany<OurStoryBlock, $this> */
     public function blocks(): HasMany
     {
-        return $this->hasMany(OurStoryBlock::class, 'homepage_our_story_id');
+        return $this->hasMany(OurStoryBlock::class, 'section_id');
     }
 }

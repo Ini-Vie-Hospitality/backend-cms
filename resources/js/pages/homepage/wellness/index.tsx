@@ -1,1 +1,36 @@
-import { CollectionTable, StructuredForm } from '@/components/homepage/structured-form';export default function WellnessIndex({record,items}:{record:Record<string,string>;items:Record<string,string|number|null>[]}){return <><StructuredForm title="Wellness Settings" action="/cms/homepage/wellness" record={record} fields={[{name:'eyebrow',label:'Eyebrow'},{name:'title',label:'Title'},{name:'description',label:'Description',type:'textarea'}]}/><CollectionTable title="Wellness Escapes" base="/cms/homepage/wellness/items" items={items} columns={['name','location','status','sort_order']}/></>}
+import {
+    CollectionTable,
+    StructuredForm,
+} from '@/components/homepage/structured-form';
+export default function WellnessIndex({
+    record,
+    items,
+}: {
+    record: Record<string, string>;
+    items: Record<string, string | number | null>[];
+}) {
+    return (
+        <>
+            <StructuredForm
+                title="Wellness Settings"
+                action="/cms/homepage/wellness"
+                record={record}
+                fields={[
+                    { name: 'eyebrow', label: 'Eyebrow' },
+                    { name: 'title', label: 'Title' },
+                    {
+                        name: 'description',
+                        label: 'Description',
+                        type: 'textarea',
+                    },
+                ]}
+            />
+            <CollectionTable
+                title="Wellness Escapes"
+                base="/cms/homepage/wellness/items"
+                items={items}
+                columns={['name', 'location', 'status', 'sort_order']}
+            />
+        </>
+    );
+}

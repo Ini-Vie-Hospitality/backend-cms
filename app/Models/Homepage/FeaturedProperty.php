@@ -11,6 +11,6 @@ class FeaturedProperty extends HomepageModel
     /** @return HasMany<FeaturedPropertyItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(FeaturedPropertyItem::class, 'homepage_featured_property_id');
+        return $this->hasMany(FeaturedPropertyItem::class, 'section_id');
     }
 }

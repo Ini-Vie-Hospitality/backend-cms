@@ -11,6 +11,6 @@ class FeaturedIn extends HomepageModel
     /** @return HasMany<FeaturedInItem, $this> */
     public function items(): HasMany
     {
-        return $this->hasMany(FeaturedInItem::class, 'homepage_featured_in_id');
+        return $this->hasMany(FeaturedInItem::class, 'section_id');
     }
 }
