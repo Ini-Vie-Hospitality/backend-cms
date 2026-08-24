@@ -21,6 +21,8 @@ class BrandIntroductionController extends Controller
     {
         $service->update($request);
 
-        return back()->with('success', 'Brand introduction saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Brand introduction saved.']);
+
+        return back();
     }
 }

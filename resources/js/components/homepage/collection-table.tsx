@@ -34,7 +34,7 @@ function TableValue({
 
 export function CollectionTable({ title, base, items, columns }: Props) {
     return (
-        <div className="mx-auto max-w-6xl space-y-6 p-6">
+        <div className="w-full max-w-[1180px] space-y-6">
             <div className="flex items-center justify-between">
                 <h2 className="font-serif text-2xl font-medium">{title}</h2>
                 <Button asChild>

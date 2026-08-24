@@ -6,6 +6,7 @@ use App\Http\Requests\Homepage\SaveFooterContactRequest;
 use App\Http\Requests\Homepage\SaveFooterSocialRequest;
 use App\Services\Homepage\HomepageRelationService;
 use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
 
 class FooterController extends SectionController
 {
@@ -15,12 +16,16 @@ class FooterController extends SectionController
     {
         $relations->saveFooterContact($request, $item);
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Footer contact saved.']);
+
         return back();
     }
 
     public function deleteContact(int $item, HomepageRelationService $relations): RedirectResponse
     {
         $relations->delete('homepage_footer_contacts', $item);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Footer contact deleted.']);
 
         return back();
     }
@@ -29,12 +34,16 @@ class FooterController extends SectionController
     {
         $relations->saveFooterSocial($request, $item);
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Footer social link saved.']);
+
         return back();
     }
 
     public function deleteSocial(int $item, HomepageRelationService $relations): RedirectResponse
     {
         $relations->delete('homepage_footer_socials', $item);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Footer social link deleted.']);
 
         return back();
     }

@@ -26,6 +26,8 @@ abstract class SectionController extends Controller
     {
         $sections->update(static::SECTION, $request);
 
-        return back()->with('success', 'Section saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Section saved.']);
+
+        return back();
     }
 }

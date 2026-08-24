@@ -28,7 +28,9 @@ abstract class CollectionController extends Controller
     {
         $sections->update(static::SECTION, $request);
 
-        return back()->with('success', 'Section saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Section saved.']);
+
+        return back();
     }
 
     public function create(): Response
@@ -45,20 +47,26 @@ abstract class CollectionController extends Controller
     {
         $items->save(static::SECTION, $request);
 
-        return back()->with('success', 'Item saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Item saved.']);
+
+        return back();
     }
 
     public function updateItem(SaveItemRequest $request, int $item, HomepageItemService $items): RedirectResponse
     {
         $items->save(static::SECTION, $request, $item);
 
-        return back()->with('success', 'Item saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Item saved.']);
+
+        return back();
     }
 
     public function destroy(int $item, HomepageItemService $items): RedirectResponse
     {
         $items->delete(static::SECTION, $item);
 
-        return back()->with('success', 'Item deleted.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Item deleted.']);
+
+        return back();
     }
 }

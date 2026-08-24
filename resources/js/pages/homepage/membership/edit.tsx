@@ -30,7 +30,7 @@ export default function MembershipEdit({
                     { name: 'secondary_href', label: 'Secondary CTA redirect' },
                 ]}
             />
-            <div className="mx-auto max-w-4xl space-y-3 p-6">
+            <div className="space-y-3">
                 <h2 className="text-xl font-semibold">Membership Benefits</h2>
                 {[...benefits, undefined].map((benefit, index) => (
                     <MembershipBenefitEditor

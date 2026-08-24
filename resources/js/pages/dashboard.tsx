@@ -208,7 +208,7 @@ export default function Dashboard() {
     return (
         <>
             <Head title="Analytics Dashboard" />
-            <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6">
+            <div className="flex w-full flex-1 flex-col gap-6">
                 <header className="flex flex-col gap-3 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <p className="text-xs font-medium tracking-[0.16em] text-brand-accent uppercase">

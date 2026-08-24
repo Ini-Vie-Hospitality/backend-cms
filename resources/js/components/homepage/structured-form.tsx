@@ -1,5 +1,6 @@
 import { Head, router, usePage } from '@inertiajs/react';
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { FieldInput } from './field-input';
 import type { Field, RecordData } from './field-input';
 import { FormErrors } from './form-errors';
@@ -14,6 +15,7 @@ type Props = {
     record: RecordData | null;
     fields: Field[];
     submitLabel?: string;
+    className?: string;
 };
 
 export function StructuredForm({
@@ -22,6 +24,7 @@ export function StructuredForm({
     record,
     fields,
     submitLabel = 'Save changes',
+    className,
 }: Props) {
     const errors = usePage().props.errors as Record<string, string>;
 
@@ -37,7 +40,10 @@ export function StructuredForm({
             <Head title={title} />
             <form
                 onSubmit={submit}
-                className="mx-auto my-6 max-w-4xl space-y-6 rounded-xl border bg-card p-6 shadow-[0_2px_8px_rgba(44,36,28,0.025)]"
+                className={cn(
+                    'w-full max-w-[1180px] space-y-6 rounded-xl border bg-card p-6 shadow-[0_2px_8px_rgba(44,36,28,0.025)]',
+                    className,
+                )}
             >
                 <div>
                     <h1 className="font-serif text-3xl font-medium tracking-tight">

@@ -15,6 +15,7 @@ export default function NavbarEdit({
                 title="Navbar Settings"
                 action="/cms/homepage/navbar"
                 record={record}
+                className="max-w-none"
                 fields={[
                     { name: 'logo', label: 'Logo', type: 'file' },
                     { name: 'logo_alt', label: 'Logo alt text' },
@@ -26,8 +27,9 @@ export default function NavbarEdit({
                     { name: 'mobile_close_label', label: 'Close menu label' },
                 ]}
             />
-            <div className="mx-auto max-w-4xl space-y-4 p-6">
-                <h2 className="text-xl font-semibold">
+
+            <section className="w-full space-y-4">
+                <h2 className="font-serif text-2xl font-medium">
                     Desktop and Mobile Links
                 </h2>
                 {[...links, undefined].map((link, index) => (
@@ -37,7 +39,7 @@ export default function NavbarEdit({
                         index={index}
                     />
                 ))}
-            </div>
+            </section>
         </>
     );
 }

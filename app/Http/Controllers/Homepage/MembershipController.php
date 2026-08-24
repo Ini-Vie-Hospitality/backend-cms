@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Homepage;
 use App\Http\Requests\Homepage\SaveMembershipBenefitRequest;
 use App\Services\Homepage\HomepageRelationService;
 use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
 
 class MembershipController extends SectionController
 {
@@ -14,12 +15,16 @@ class MembershipController extends SectionController
     {
         $relations->saveBenefit($request, $item);
 
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Membership benefit saved.']);
+
         return back();
     }
 
     public function deleteBenefit(int $item, HomepageRelationService $relations): RedirectResponse
     {
         $relations->delete('homepage_membership_benefits', $item);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Membership benefit deleted.']);
 
         return back();
     }

@@ -23,19 +23,25 @@ class NavbarController extends Controller
     {
         $sections->updateNavbar($request);
 
-        return back()->with('success', 'Navbar saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Navbar saved.']);
+
+        return back();
     }
 
     public function saveLink(SaveNavbarLinkRequest $request, HomepageRelationService $relations, ?int $item = null): RedirectResponse
     {
         $relations->saveNavbarLink($request, $item);
 
-        return back()->with('success', 'Navigation link saved.');
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Navigation link saved.']);
+
+        return back();
     }
 
     public function deleteLink(int $item, HomepageRelationService $relations): RedirectResponse
     {
         $relations->delete('homepage_navbar_links', $item);
+
+        Inertia::flash('toast', ['type' => 'success', 'message' => 'Navigation link deleted.']);
 
         return back();
     }
