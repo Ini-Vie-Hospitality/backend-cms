@@ -5,6 +5,7 @@ use Database\Seeders\HomepageSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia as Assert;
 
@@ -35,6 +36,26 @@ test('each section renders its own inertia page through the default layout', fun
     foreach (['navbar' => 'navbar/edit', 'brand-introduction' => 'brand-introduction/edit', 'featured-properties' => 'featured-properties/index', 'culinary' => 'culinary/index', 'wellness' => 'wellness/index', 'membership' => 'membership/edit', 'our-story' => 'our-story/edit', 'special-offers' => 'special-offers/edit', 'whats-new' => 'whats-new/index', 'featured-in' => 'featured-in/index', 'faq' => 'faq/index', 'footer' => 'footer/edit'] as $uri => $component) {
         $this->actingAs($user)->get("/cms/homepage/$uri")->assertOk()->assertInertia(fn (Assert $page) => $page->component("homepage/$component"));
     }
+});
+
+test('published mutations revalidate the Next.js homepage after redirects', function () {
+    config([
+        'services.homepage.revalidate_url' => 'http://localhost:3000/api/revalidate',
+        'services.homepage.revalidate_secret' => 'revalidate-secret',
+    ]);
+    Http::fake();
+
+    $this->actingAs(User::factory()->create())
+        ->put('/cms/homepage/faq', [
+            'eyebrow' => 'Help',
+            'title' => 'Updated questions',
+            'description' => 'Updated answers',
+            'status' => 'published',
+        ])
+        ->assertRedirect();
+
+    Http::assertSent(fn ($request) => $request->url() === 'http://localhost:3000/api/revalidate'
+        && $request->hasHeader('Authorization', 'Bearer revalidate-secret'));
 });
 
 test('section forms use relational fields and publication status', function () {
