@@ -17,11 +17,13 @@ import { dashboard } from '@/routes';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard(),
-        icon: LayoutGrid,
-    },
+    { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+    ...[
+        ['Navbar', 'navbar'], ['Brand Introduction', 'brand-introduction'], ['Featured Properties', 'featured-properties'],
+        ['Culinary Journey', 'culinary'], ['Wellness Harmony', 'wellness'], ['Membership', 'membership'],
+        ['Our Story', 'our-story'], ['Special Offers', 'special-offers'], ["What's New", 'whats-new'],
+        ['Featured In', 'featured-in'], ['FAQ', 'faq'], ['Footer', 'footer'],
+    ].map(([title, key]) => ({ title, href: `/cms/homepage/${key}`, icon: LayoutGrid })),
 ];
 
 const footerNavItems: NavItem[] = [

@@ -1,0 +1,1 @@
+import { ItemForm } from '@/components/homepage/item-form';import { journalFields } from '../collection-fields';export default function Create(){return <ItemForm title="Add Journal Story" action="/cms/homepage/whats-new/items" fields={journalFields}/>}

@@ -1,0 +1,1 @@
+import { ItemForm } from '@/components/homepage/item-form';import { culinaryFields } from '../collection-fields';export default function Create(){return <ItemForm title="Add Dining Destination" action="/cms/homepage/culinary/items" fields={culinaryFields}/>}

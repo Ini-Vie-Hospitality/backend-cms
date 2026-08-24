@@ -1,0 +1,1 @@
+import { ItemForm } from '@/components/homepage/item-form';import { logoFields } from '../collection-fields';export default function Create(){return <ItemForm title="Add Publication Logo" action="/cms/homepage/featured-in/items" fields={logoFields}/>}
