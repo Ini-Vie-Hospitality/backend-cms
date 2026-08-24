@@ -21,6 +21,9 @@ import {
 } from 'lucide-react';
 import { Bar, Doughnut, Line } from 'react-chartjs-2';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useChartPalette } from '@/hooks/use-chart-palette';
+import type { ChartPalette } from '@/hooks/use-chart-palette';
+import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 
 ChartJS.register(
@@ -35,7 +38,7 @@ ChartJS.register(
     Tooltip,
 );
 
-const trafficData = {
+const createTrafficData = (palette: ChartPalette) => ({
     labels: [
         '01 Aug',
         '04 Aug',
@@ -52,8 +55,8 @@ const trafficData = {
         {
             label: 'Sessions',
             data: [184, 236, 208, 312, 285, 384, 351, 426, 402, 488],
-            borderColor: '#E06A0B',
-            backgroundColor: 'rgba(224, 106, 11, 0.12)',
+            borderColor: palette.primary,
+            backgroundColor: palette.area,
             fill: true,
             tension: 0.38,
             pointRadius: 0,
@@ -61,46 +64,55 @@ const trafficData = {
             borderWidth: 2,
         },
     ],
-};
+});
 
-const deviceData = {
+const createDeviceData = (palette: ChartPalette) => ({
     labels: ['Mobile', 'Desktop', 'Tablet'],
     datasets: [
         {
             data: [62, 29, 9],
-            backgroundColor: ['#1A1C18', '#E06A0B', '#C8C4BA'],
+            backgroundColor: [
+                palette.secondary,
+                palette.primary,
+                palette.quaternary,
+            ],
             borderRadius: 4,
             borderSkipped: false,
         },
     ],
-};
+});
 
-const sourceData = {
+const createSourceData = (palette: ChartPalette) => ({
     labels: ['Organic search', 'Direct', 'Social', 'Referral'],
     datasets: [
         {
             data: [44, 28, 18, 10],
-            backgroundColor: ['#E06A0B', '#1A1C18', '#9B978E', '#C8C4BA'],
+            backgroundColor: [
+                palette.primary,
+                palette.secondary,
+                palette.tertiary,
+                palette.quaternary,
+            ],
             borderWidth: 0,
             hoverOffset: 4,
         },
     ],
-};
+});
 
-const chartOptions = {
+const createChartOptions = (palette: ChartPalette) => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
         legend: { display: false },
         tooltip: {
-            backgroundColor: '#1A1C18',
+            backgroundColor: palette.tooltip,
             padding: 12,
-            titleColor: '#F8F7F3',
-            bodyColor: '#F8F7F3',
+            titleColor: palette.tooltipText,
+            bodyColor: palette.tooltipText,
             displayColors: false,
         },
     },
-};
+});
 
 const metrics = [
     {
@@ -140,7 +152,7 @@ const topPages = [
     { page: '/wellness', views: '2,731', engagement: '59.6%' },
 ];
 
-const eventData = {
+const createEventData = (palette: ChartPalette) => ({
     labels: [
         'page_view',
         'click',
@@ -153,18 +165,18 @@ const eventData = {
         {
             data: [31284, 8421, 2178, 1936, 864, 328],
             backgroundColor: [
-                '#1A1C18',
-                '#9B978E',
-                '#E06A0B',
-                '#C8C4BA',
-                '#9B978E',
-                '#E06A0B',
+                palette.secondary,
+                palette.tertiary,
+                palette.primary,
+                palette.quaternary,
+                palette.tertiary,
+                palette.light,
             ],
             borderRadius: 4,
             borderSkipped: false,
         },
     ],
-};
+});
 
 const events = [
     { name: 'page_view', count: '31,284', users: '8,492', conversion: '—' },
@@ -186,16 +198,23 @@ const events = [
 ];
 
 export default function Dashboard() {
+    const palette = useChartPalette();
+    const trafficData = createTrafficData(palette);
+    const deviceData = createDeviceData(palette);
+    const sourceData = createSourceData(palette);
+    const eventData = createEventData(palette);
+    const chartOptions = createChartOptions(palette);
+
     return (
         <>
             <Head title="Analytics Dashboard" />
             <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 p-4 md:p-6">
                 <header className="flex flex-col gap-3 border-b border-border pb-6 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p className="text-xs font-medium tracking-[0.16em] text-muted-foreground uppercase">
+                        <p className="text-xs font-medium tracking-[0.16em] text-brand-accent uppercase">
                             Website analytics
                         </p>
-                        <h1 className="mt-2 text-2xl font-semibold tracking-tight">
+                        <h1 className="mt-2 font-serif text-3xl font-medium tracking-tight text-foreground md:text-4xl">
                             Traffic overview
                         </h1>
                     </div>
@@ -224,7 +243,12 @@ export default function Dashboard() {
                                             {value}
                                         </p>
                                         <p
-                                            className={`mt-2 flex items-center gap-1 text-xs font-medium ${trend === 'up' ? 'text-emerald-700 dark:text-emerald-400' : 'text-rose-700 dark:text-rose-400'}`}
+                                            className={cn(
+                                                'mt-2 flex items-center gap-1 text-xs font-medium',
+                                                trend === 'up'
+                                                    ? 'text-success'
+                                                    : 'text-destructive',
+                                            )}
                                         >
                                             {trend === 'up' ? (
                                                 <ArrowUpRight className="size-3.5" />
@@ -238,7 +262,7 @@ export default function Dashboard() {
                                         </p>
                                     </div>
                                     <Icon
-                                        className="size-5 text-muted-foreground"
+                                        className="size-5 text-brand-accent"
                                         strokeWidth={1.5}
                                         aria-hidden="true"
                                     />
@@ -270,7 +294,7 @@ export default function Dashboard() {
                                         x: {
                                             grid: { display: false },
                                             ticks: {
-                                                color: '#73716B',
+                                                color: palette.text,
                                                 maxRotation: 0,
                                             },
                                             border: { display: false },
@@ -278,10 +302,10 @@ export default function Dashboard() {
                                         y: {
                                             beginAtZero: true,
                                             grid: {
-                                                color: 'rgba(115, 113, 107, 0.12)',
+                                                color: palette.grid,
                                             },
                                             ticks: {
-                                                color: '#73716B',
+                                                color: palette.text,
                                                 precision: 0,
                                             },
                                             border: { display: false },
@@ -359,11 +383,11 @@ export default function Dashboard() {
                                         x: {
                                             beginAtZero: true,
                                             grid: {
-                                                color: 'rgba(115, 113, 107, 0.12)',
+                                                color: palette.grid,
                                             },
                                             border: { display: false },
                                             ticks: {
-                                                color: '#73716B',
+                                                color: palette.text,
                                                 callback: (value) =>
                                                     Number(
                                                         value,
@@ -374,7 +398,7 @@ export default function Dashboard() {
                                             grid: { display: false },
                                             border: { display: false },
                                             ticks: {
-                                                color: '#73716B',
+                                                color: palette.text,
                                                 font: { family: 'monospace' },
                                             },
                                         },
@@ -394,7 +418,7 @@ export default function Dashboard() {
                         <CardContent className="px-6 pb-3">
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[390px] text-left text-sm">
-                                    <thead className="border-b text-xs tracking-wider text-muted-foreground uppercase">
+                                    <thead className="border-b bg-muted/60 text-xs tracking-wider text-muted-foreground uppercase">
                                         <tr>
                                             <th className="pb-3 font-medium">
                                                 Event
@@ -420,7 +444,7 @@ export default function Dashboard() {
                                             }) => (
                                                 <tr
                                                     key={name}
-                                                    className="border-b last:border-0"
+                                                    className="border-b transition-colors last:border-0 hover:bg-accent/60"
                                                 >
                                                     <td className="py-3 font-mono text-xs">
                                                         {name}
@@ -461,17 +485,17 @@ export default function Dashboard() {
                                         x: {
                                             grid: { display: false },
                                             border: { display: false },
-                                            ticks: { color: '#73716B' },
+                                            ticks: { color: palette.text },
                                         },
                                         y: {
                                             beginAtZero: true,
                                             max: 70,
                                             grid: {
-                                                color: 'rgba(115, 113, 107, 0.12)',
+                                                color: palette.grid,
                                             },
                                             border: { display: false },
                                             ticks: {
-                                                color: '#73716B',
+                                                color: palette.text,
                                                 callback: (value) =>
                                                     `${value}%`,
                                             },
@@ -491,7 +515,7 @@ export default function Dashboard() {
                         <CardContent className="px-6 pb-3">
                             <div className="overflow-x-auto">
                                 <table className="w-full min-w-[420px] text-left text-sm">
-                                    <thead className="border-b text-xs tracking-wider text-muted-foreground uppercase">
+                                    <thead className="border-b bg-muted/60 text-xs tracking-wider text-muted-foreground uppercase">
                                         <tr>
                                             <th className="pb-3 font-medium">
                                                 Page
@@ -509,7 +533,7 @@ export default function Dashboard() {
                                             ({ page, views, engagement }) => (
                                                 <tr
                                                     key={page}
-                                                    className="border-b last:border-0"
+                                                    className="border-b transition-colors last:border-0 hover:bg-accent/60"
                                                 >
                                                     <td className="py-3 font-mono text-xs">
                                                         {page}

@@ -8,7 +8,7 @@ export function PublicationStatus({ value }: { value?: string | null }) {
                 id="status"
                 name="status"
                 defaultValue={value ?? 'draft'}
-                className="h-10 w-full rounded-md border bg-background px-3"
+                className="h-10 w-full rounded-md border border-input bg-card px-3 text-foreground outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/12"
             >
                 <option value="draft">Draft</option>
                 <option value="published">Published</option>

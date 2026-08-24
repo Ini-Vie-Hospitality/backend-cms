@@ -35,9 +35,14 @@ export function StructuredForm({
     return (
         <>
             <Head title={title} />
-            <form onSubmit={submit} className="mx-auto max-w-4xl space-y-6 p-6">
+            <form
+                onSubmit={submit}
+                className="mx-auto my-6 max-w-4xl space-y-6 rounded-xl border bg-card p-6 shadow-[0_2px_8px_rgba(44,36,28,0.025)]"
+            >
                 <div>
-                    <h1 className="text-2xl font-semibold">{title}</h1>
+                    <h1 className="font-serif text-3xl font-medium tracking-tight">
+                        {title}
+                    </h1>
                     <p className="mt-1 text-sm text-muted-foreground">
                         Manage the published content shown on the public
                         homepage.

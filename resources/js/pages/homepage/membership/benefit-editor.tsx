@@ -36,7 +36,7 @@ export function MembershipBenefitEditor({
     return (
         <form
             onSubmit={save}
-            className="grid gap-3 rounded-md border p-4 md:grid-cols-4"
+            className="grid gap-3 rounded-xl border bg-card p-4 shadow-[0_2px_8px_rgba(44,36,28,0.025)] md:grid-cols-4"
         >
             <Input
                 name="label"
@@ -46,7 +46,7 @@ export function MembershipBenefitEditor({
             <select
                 name="icon"
                 defaultValue={benefit?.icon ?? 'diamond'}
-                className="h-10 rounded-md border bg-background"
+                className="h-10 rounded-md border border-input bg-card outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/12"
             >
                 <option value="diamond">Diamond</option>
                 <option value="gift">Gift</option>

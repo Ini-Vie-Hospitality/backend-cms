@@ -4,7 +4,7 @@ export function FormErrors({ errors }: { errors: Record<string, string> }) {
     }
 
     return (
-        <div className="rounded-md border border-destructive p-3 text-sm text-destructive">
+        <div className="rounded-md border border-destructive/30 bg-destructive/6 p-3 text-sm text-destructive">
             {Object.entries(errors).map(([key, message]) => (
                 <p key={key}>{message}</p>
             ))}

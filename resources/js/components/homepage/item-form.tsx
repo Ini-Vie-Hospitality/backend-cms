@@ -34,8 +34,13 @@ export function ItemForm({
     return (
         <>
             <Head title={title} />
-            <form onSubmit={submit} className="mx-auto max-w-3xl space-y-6 p-6">
-                <h1 className="text-2xl font-semibold">{title}</h1>
+            <form
+                onSubmit={submit}
+                className="mx-auto my-6 max-w-3xl space-y-6 rounded-xl border bg-card p-6 shadow-[0_2px_8px_rgba(44,36,28,0.025)]"
+            >
+                <h1 className="font-serif text-3xl font-medium tracking-tight">
+                    {title}
+                </h1>
                 <FormErrors errors={errors} />
                 <div className="grid gap-5 md:grid-cols-2">
                     {fields.map((field) => (

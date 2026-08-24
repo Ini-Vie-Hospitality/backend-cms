@@ -36,7 +36,7 @@ export function FieldInput({
                     id={field.name}
                     name={field.name}
                     defaultValue={value}
-                    className="min-h-28 w-full rounded-md border bg-background p-3 text-sm"
+                    className="min-h-28 w-full rounded-md border border-input bg-card p-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/12"
                     required
                 />
             ) : (

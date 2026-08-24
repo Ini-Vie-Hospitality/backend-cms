@@ -37,14 +37,14 @@ export function NavbarLinkEditor({
     return (
         <form
             onSubmit={save}
-            className="grid gap-3 rounded-md border p-4 md:grid-cols-5"
+            className="grid gap-3 rounded-xl border bg-card p-4 shadow-[0_2px_8px_rgba(44,36,28,0.025)] md:grid-cols-5"
         >
             <div>
                 <Label>Audience</Label>
                 <select
                     name="audience"
                     defaultValue={link?.audience ?? 'desktop'}
-                    className="h-10 w-full rounded-md border bg-background px-2"
+                    className="h-10 w-full rounded-md border border-input bg-card px-2 outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/12"
                 >
                     <option value="desktop">Desktop</option>
                     <option value="mobile">Mobile sidebar</option>
