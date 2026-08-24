@@ -15,6 +15,7 @@ import {
     Sparkles,
     ScanEye,
     Utensils,
+    Bot,
 } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavMain } from '@/components/nav-main';
@@ -33,6 +34,7 @@ import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
+    { title: 'Knowledge Base', href: '/cms/concierge/knowledge', icon: Bot },
     { title: 'Navbar', href: '/cms/homepage/navbar', icon: Navigation },
     {
         title: 'Brand Introduction',
