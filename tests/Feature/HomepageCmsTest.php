@@ -133,3 +133,28 @@ test('source contains no raw json cms editor', function () {
     $source = $files->map(fn ($file) => file_get_contents($file))->implode("\n");
     expect($source)->not->toContain('JSON.parse')->not->toContain('JSON.stringify')->not->toContain('content_json');
 });
+
+test('membership benefits accept supported hospitality icons', function () {
+    $this->actingAs(User::factory()->create())
+        ->post('/cms/homepage/membership/benefits', [
+            'label' => 'Priority dining access',
+            'icon' => 'crown',
+            'sort_order' => 4,
+            'is_active' => true,
+        ])
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+
+    expect(DB::table('homepage_membership_benefits')->where('label', 'Priority dining access')->value('icon'))->toBe('crown');
+});
+
+test('membership benefits reject unsupported icons', function () {
+    $this->actingAs(User::factory()->create())
+        ->post('/cms/homepage/membership/benefits', [
+            'label' => 'Unknown benefit',
+            'icon' => 'unknown-icon',
+            'sort_order' => 4,
+            'is_active' => true,
+        ])
+        ->assertSessionHasErrors('icon');
+});
