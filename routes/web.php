@@ -1,10 +1,17 @@
 <?php
 
+use App\Http\Controllers\Concierge\KnowledgeItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(fn () => Route::inertia('dashboard', 'dashboard')->name('dashboard'));
+
+Route::middleware(['auth', 'verified'])->prefix('cms/concierge')->name('concierge.')->group(function (): void {
+    Route::post('knowledge/reindex-all', [KnowledgeItemController::class, 'reindexAll'])->name('knowledge.reindex-all');
+    Route::post('knowledge/{knowledge}/reindex', [KnowledgeItemController::class, 'reindex'])->name('knowledge.reindex');
+    Route::resource('knowledge', KnowledgeItemController::class)->except('show');
+});
 
 require __DIR__.'/homepage.php';
 require __DIR__.'/settings.php';
