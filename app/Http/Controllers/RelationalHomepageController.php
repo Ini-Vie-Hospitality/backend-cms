@@ -288,7 +288,7 @@ class RelationalHomepageController extends Controller
         return Inertia::render("homepage/$section/create");
     }
 
-    public function editItem(string $section, int $item): Response
+    public function editItem(int $item, string $section): Response
     {
         $table = $this->itemDefinitions()[$section][0] ?? abort(404);
 

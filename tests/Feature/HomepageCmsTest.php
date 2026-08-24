@@ -41,6 +41,45 @@ test('collection create update delete uses explicit relational columns', functio
     expect(DB::table('homepage_faq_items')->where('id', $item->id)->exists())->toBeFalse();
 });
 
+test('collection edit routes bind item before the default section parameter', function () {
+    $user = User::factory()->create();
+    $routes = [
+        'featured-properties' => 'homepage_featured_properties',
+        'culinary' => 'homepage_culinary_destinations',
+        'wellness' => 'homepage_wellness_escapes',
+        'whats-new' => 'homepage_journal_stories',
+        'featured-in' => 'homepage_featured_in_logos',
+        'faq' => 'homepage_faq_items',
+    ];
+
+    foreach ($routes as $section => $table) {
+        $item = DB::table($table)->first();
+        $this->actingAs($user)
+            ->get("/cms/homepage/$section/items/$item->id/edit")
+            ->assertOk()
+            ->assertInertia(fn (Assert $page) => $page
+                ->component("homepage/$section/edit")
+                ->where('item.id', $item->id));
+    }
+});
+
+test('collection update and delete routes preserve item then section binding', function () {
+    $user = User::factory()->create();
+    $item = DB::table('homepage_faq_items')->first();
+    $payload = ['question' => 'Updated question', 'answer' => 'Updated answer', 'sort_order' => 1, 'status' => 'published'];
+
+    $this->actingAs($user)
+        ->put("/cms/homepage/faq/items/$item->id", $payload)
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+    expect(DB::table('homepage_faq_items')->where('id', $item->id)->value('question'))->toBe('Updated question');
+
+    $this->actingAs($user)
+        ->delete("/cms/homepage/faq/items/$item->id")
+        ->assertRedirect();
+    expect(DB::table('homepage_faq_items')->where('id', $item->id)->exists())->toBeFalse();
+});
+
 test('file uploads use laravel public storage', function () {
     Storage::fake('public');
     $payload = ['name' => 'Villa', 'category' => 'Stay', 'description' => 'Private', 'image_alt' => 'Villa', 'href' => 'https://example.test/villa', 'cta_label' => 'Explore', 'sort_order' => 9, 'status' => 'published', 'image' => UploadedFile::fake()->image('villa.webp')];
