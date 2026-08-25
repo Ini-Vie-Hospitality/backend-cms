@@ -18,7 +18,7 @@ class UpdateSectionRequest extends HomepageRequest
         foreach ($definition['media'] as $field => $type) {
             $rules[$field] = $type === 'video'
                 ? ['nullable', 'file', 'mimetypes:video/mp4,video/webm', 'max:51200']
-                : ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:10240'];
+                : ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:51200'];
         }
 
         return $rules;

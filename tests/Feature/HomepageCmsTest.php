@@ -203,6 +203,17 @@ test('homepage cms pages expose image preview urls', function () {
     $this->actingAs($user)->get('/cms/homepage/special-offers')->assertInertia(fn (Assert $page) => $page->where('items.0.image_url', $imageUrl));
 });
 
+test('membership cms page exposes its background video preview url', function () {
+    $videoPath = 'homepage/membership-background.mp4';
+    DB::table('homepage_memberships')->update(['video_path' => $videoPath]);
+
+    $this->actingAs(User::factory()->create())
+        ->get('/cms/homepage/membership')
+        ->assertInertia(fn (Assert $page) => $page
+            ->component('homepage/membership/edit')
+            ->where('record.video_url', url('/storage/'.$videoPath)));
+});
+
 test('fixed story and offer slots have update routes but no create or delete routes', function () {
     $user = User::factory()->create();
     $block = DB::table('homepage_story_blocks')->first();

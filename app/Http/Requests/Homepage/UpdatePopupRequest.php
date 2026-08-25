@@ -9,7 +9,7 @@ class UpdatePopupRequest extends HomepageRequest
     {
         return [
             'status' => $this->publicationRules(),
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:10240'],
+            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:51200'],
             'redirect_url' => ['required', 'url', 'max:2048'],
         ];
     }

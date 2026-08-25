@@ -14,7 +14,7 @@ class UpdateBrandIntroductionRequest extends HomepageRequest
             $rules["paragraph_$slot"] = ['required', 'string', 'max:10000'];
         }
         foreach ([1, 2, 3] as $slot) {
-            $rules["image_$slot"] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:10240'];
+            $rules["image_$slot"] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:51200'];
             $rules["image_alt_$slot"] = ['required', 'string', 'max:255'];
         }
 

@@ -9,6 +9,8 @@ export default function MembershipEdit({
     record: Record<string, string>;
     benefits: Benefit[];
 }) {
+    const videoUrl = record.video_url;
+
     return (
         <>
             <StructuredForm
@@ -30,6 +32,19 @@ export default function MembershipEdit({
                     { name: 'secondary_href', label: 'Secondary CTA redirect' },
                 ]}
             />
+            {videoUrl && (
+                <div className="w-full max-w-[1180px] space-y-2 rounded-xl border bg-card p-6">
+                    <h2 className="text-lg font-semibold">
+                        Current background video
+                    </h2>
+                    <video
+                        src={videoUrl}
+                        controls
+                        preload="metadata"
+                        className="max-h-[420px] w-full rounded-md bg-black object-contain"
+                    />
+                </div>
+            )}
             <div className="space-y-3">
                 <h2 className="text-xl font-semibold">Membership Benefits</h2>
                 {[...benefits, undefined].map((benefit, index) => (

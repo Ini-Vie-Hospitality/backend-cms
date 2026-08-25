@@ -16,7 +16,7 @@ class SaveItemRequest extends HomepageRequest
             $rules[$field] = ['required', 'string', 'max:'.($type === 'text' ? 10000 : 2048)];
         }
         if ($definition['image']) {
-            $rules['image'] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:10240'];
+            $rules['image'] = ['nullable', 'image', 'mimes:jpg,jpeg,png,webp,avif', 'max:51200'];
         }
 
         return $rules;

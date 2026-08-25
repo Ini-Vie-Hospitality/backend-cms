@@ -43,6 +43,9 @@ class HomepagePageService
     {
         $definition = HomepageDefinitions::section($section);
         $record = $this->workspace->root($definition['table'])->firstOrFail();
+        if ($section === 'membership') {
+            $record->video_url = $this->media->url($record->video_path);
+        }
         $props = ['record' => $record];
         $relations = [
             'featured-properties' => ['items', 'homepage_featured_properties', 'sort_order'], 'culinary' => ['items', 'homepage_culinary_destinations', 'sort_order'],
