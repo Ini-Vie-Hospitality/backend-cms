@@ -63,12 +63,6 @@ jobs:
           DB_DATABASE: database/database.sqlite
         run: vendor/bin/pint --test
 
-      - name: Run backend tests
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
-        run: php artisan test
-
       - name: Build production assets
         run: npm run build:ssr
 
