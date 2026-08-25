@@ -13,6 +13,8 @@ beforeEach(function () {
 
 test('public homepage matches the relational contract', function () {
     $this->getJson('/api/homepage')->assertOk()
+        ->assertJsonPath('popup.image', 'https://inivie.com/voting-popup/pop-iniviehos.webp')
+        ->assertJsonPath('popup.href', 'https://exquisite-awards.com/awards/2026/categories/best-unique-concept-hotel-group?nominee=ini-vie-hospitality')
         ->assertJsonPath('navbar.book.label', 'Book Your Stay')
         ->assertJsonPath('brandIntroduction.title', 'iNi ViE Hospitality')
         ->assertJsonPath('featuredProperties.items.0.name', 'Leedon Villa Seminyak')

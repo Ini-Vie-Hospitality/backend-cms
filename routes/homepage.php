@@ -9,6 +9,7 @@ use App\Http\Controllers\Homepage\FooterController;
 use App\Http\Controllers\Homepage\MembershipController;
 use App\Http\Controllers\Homepage\NavbarController;
 use App\Http\Controllers\Homepage\OurStoryController;
+use App\Http\Controllers\Homepage\PopupController;
 use App\Http\Controllers\Homepage\SpecialOffersController;
 use App\Http\Controllers\Homepage\WellnessController;
 use App\Http\Controllers\Homepage\WhatsNewController;
@@ -31,6 +32,8 @@ Route::middleware(['auth', 'verified', ResolveHomepageWorkspace::class, Revalida
 
     Route::get('brand-introduction', [BrandIntroductionController::class, 'edit'])->name('brand-introduction.edit');
     Route::put('brand-introduction', [BrandIntroductionController::class, 'update'])->name('brand-introduction.update');
+    Route::get('popup', [PopupController::class, 'edit'])->name('popup.edit');
+    Route::put('popup', [PopupController::class, 'update'])->name('popup.update');
 
     $collections = [
         'featured-properties' => FeaturedPropertiesController::class, 'culinary' => CulinaryController::class,

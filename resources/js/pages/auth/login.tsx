@@ -1,7 +1,6 @@
 import { Form, Head } from '@inertiajs/react';
-import { ArrowLeft, ArrowRight, LockKeyhole } from 'lucide-react';
+import { ArrowRight, LockKeyhole } from 'lucide-react';
 import InputError from '@/components/input-error';
-import PasskeyVerify from '@/components/passkey-verify';
 import PasswordInput from '@/components/password-input';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Spinner } from '@/components/ui/spinner';
-import { home } from '@/routes';
 import { store } from '@/routes/login';
 import { request } from '@/routes/password';
 
@@ -19,13 +17,12 @@ type Props = {
 };
 
 const fieldClassName =
-    'h-[53px] rounded-[5px] border-[#d7ccbd] bg-[#fcfaf7] px-4 text-[0.95rem] text-[#302a24] shadow-none placeholder:text-[#9b9186] focus-visible:border-[#b99257] focus-visible:ring-[#b99257]/15';
+    'h-[44px] rounded-[5px] border-[#d7ccbd] bg-[#fcfaf7] px-4 text-[0.95rem] text-[#302a24] shadow-none placeholder:text-[#9b9186] focus-visible:border-[#b99257] focus-visible:ring-[#b99257]/15';
 
 export default function Login({ status, canResetPassword }: Props) {
     return (
         <>
             <Head title="Sign in to CMS" />
-            <PasskeyVerify />
 
             {status && (
                 <div className="mb-6 rounded-md border border-success/20 bg-success-muted px-4 py-3 text-sm font-medium text-success">
@@ -44,7 +41,7 @@ export default function Login({ status, canResetPassword }: Props) {
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="email"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Email Address
                                 </Label>
@@ -65,7 +62,7 @@ export default function Login({ status, canResetPassword }: Props) {
                             <div className="grid gap-2.5">
                                 <Label
                                     htmlFor="password"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Password
                                 </Label>
@@ -109,7 +106,7 @@ export default function Login({ status, canResetPassword }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-3 h-[60px] rounded-[5px] bg-[#29231d] text-base text-white hover:bg-[#3a322a]"
+                                className="mt-3 h-[50px] rounded-[5px] bg-[#29231d] text-base text-white hover:bg-[#3a322a]"
                                 tabIndex={5}
                                 disabled={processing}
                                 data-test="login-button"
@@ -131,15 +128,6 @@ export default function Login({ status, canResetPassword }: Props) {
                                 staff.
                             </span>
                         </div>
-
-                        <TextLink
-                            href={home()}
-                            tabIndex={6}
-                            className="mx-auto mt-8 flex w-fit items-center gap-3 text-sm font-medium text-[#a56f22] no-underline hover:text-[#825716]"
-                        >
-                            <ArrowLeft className="size-4" />
-                            Back to Ini Vie Hospitality
-                        </TextLink>
                     </>
                 )}
             </Form>

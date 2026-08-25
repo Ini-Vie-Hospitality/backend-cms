@@ -8,6 +8,7 @@ import {
     HeartPulse,
     History,
     Hotel,
+    Image as ImageIcon,
     LayoutGrid,
     Navigation,
     Newspaper,
@@ -36,6 +37,7 @@ const mainNavItems: NavItem[] = [
     { title: 'Dashboard', href: dashboard(), icon: LayoutGrid },
     { title: 'Knowledge Base', href: '/cms/concierge/knowledge', icon: Bot },
     { title: 'Navbar', href: '/cms/homepage/navbar', icon: Navigation },
+    { title: 'Popup', href: '/cms/homepage/popup', icon: ImageIcon },
     {
         title: 'Brand Introduction',
         href: '/cms/homepage/brand-introduction',

@@ -15,7 +15,7 @@ type Props = {
 };
 
 const fieldClassName =
-    'h-[53px] rounded-[5px] border-[#d7ccbd] bg-[#fcfaf7] px-4 text-[0.95rem] text-[#302a24] shadow-none placeholder:text-[#9b9186] focus-visible:border-[#b99257] focus-visible:ring-[#b99257]/15';
+    'h-[44px] rounded-[5px] border-[#d7ccbd] bg-[#fcfaf7] px-4 text-[0.95rem] text-[#302a24] shadow-none placeholder:text-[#9b9186] focus-visible:border-[#b99257] focus-visible:ring-[#b99257]/15';
 
 export default function Register({ passwordRules }: Props) {
     return (
@@ -33,7 +33,7 @@ export default function Register({ passwordRules }: Props) {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="name"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Full Name
                                 </Label>
@@ -54,7 +54,7 @@ export default function Register({ passwordRules }: Props) {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="email"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Email Address
                                 </Label>
@@ -74,7 +74,7 @@ export default function Register({ passwordRules }: Props) {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="password"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Password
                                 </Label>
@@ -94,7 +94,7 @@ export default function Register({ passwordRules }: Props) {
                             <div className="grid gap-2">
                                 <Label
                                     htmlFor="password_confirmation"
-                                    className="text-[0.94rem] font-medium text-[#342d26]"
+                                    className="text-[0.9rem] font-medium text-[#342d26]"
                                 >
                                     Confirm Password
                                 </Label>
@@ -115,7 +115,7 @@ export default function Register({ passwordRules }: Props) {
 
                             <Button
                                 type="submit"
-                                className="mt-2 h-[60px] rounded-[5px] bg-[#29231d] text-base text-white hover:bg-[#3a322a]"
+                                className="mt-2 h-[50px] rounded-[5px] bg-[#29231d] text-base text-white hover:bg-[#3a322a]"
                                 tabIndex={5}
                                 disabled={processing}
                                 data-test="register-user-button"

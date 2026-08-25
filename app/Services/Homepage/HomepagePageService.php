@@ -19,6 +19,15 @@ class HomepagePageService
     }
 
     /** @return array<string, mixed> */
+    public function popup(): array
+    {
+        $record = $this->workspace->root('homepage_popups')->firstOrFail();
+        $record->image_url = $this->media->url($record->image_path);
+
+        return ['record' => $record];
+    }
+
+    /** @return array<string, mixed> */
     public function brandIntroduction(): array
     {
         $record = $this->workspace->root('homepage_brand_introductions')->firstOrFail();

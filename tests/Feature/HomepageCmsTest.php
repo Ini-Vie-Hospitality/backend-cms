@@ -33,9 +33,33 @@ test('homepage preview uses the configured frontend origin', function () {
 
 test('each section renders its own inertia page through the default layout', function () {
     $user = User::factory()->create();
-    foreach (['navbar' => 'navbar/edit', 'brand-introduction' => 'brand-introduction/edit', 'featured-properties' => 'featured-properties/index', 'culinary' => 'culinary/index', 'wellness' => 'wellness/index', 'membership' => 'membership/edit', 'our-story' => 'our-story/edit', 'special-offers' => 'special-offers/edit', 'whats-new' => 'whats-new/index', 'featured-in' => 'featured-in/index', 'faq' => 'faq/index', 'footer' => 'footer/edit'] as $uri => $component) {
+    foreach (['navbar' => 'navbar/edit', 'popup' => 'popup/edit', 'brand-introduction' => 'brand-introduction/edit', 'featured-properties' => 'featured-properties/index', 'culinary' => 'culinary/index', 'wellness' => 'wellness/index', 'membership' => 'membership/edit', 'our-story' => 'our-story/edit', 'special-offers' => 'special-offers/edit', 'whats-new' => 'whats-new/index', 'featured-in' => 'featured-in/index', 'faq' => 'faq/index', 'footer' => 'footer/edit'] as $uri => $component) {
         $this->actingAs($user)->get("/cms/homepage/$uri")->assertOk()->assertInertia(fn (Assert $page) => $page->component("homepage/$component"));
     }
+
+    test('popup can be updated with an image and redirect', function () {
+        Storage::fake('public');
+        $user = User::factory()->create();
+
+        $this->actingAs($user)
+            ->put('/cms/homepage/popup', [
+                'image' => UploadedFile::fake()->image('announcement.webp'),
+                'redirect_url' => 'https://inivie.com/offers',
+                'status' => 'published',
+            ])
+            ->assertRedirect();
+
+        $workspaceId = DB::table('homepage_workspaces')->where('key', 'published')->value('id');
+        $popup = DB::table('homepage_popups')->where('workspace_id', $workspaceId)->first();
+
+        expect($popup->redirect_url)->toBe('https://inivie.com/offers')
+            ->and($popup->image_path)->toStartWith('homepage/');
+        Storage::disk('public')->assertExists($popup->image_path);
+
+        $this->getJson('/api/homepage')
+            ->assertJsonPath('popup.href', 'https://inivie.com/offers')
+            ->assertJsonPath('popup.alt', 'Website announcement');
+    });
 });
 
 test('published mutations revalidate the Next.js homepage after redirects', function () {
