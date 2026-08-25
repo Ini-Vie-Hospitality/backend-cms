@@ -7,5 +7,5 @@ return [
     'embedding_model' => env('CONCIERGE_EMBEDDING_MODEL', 'bge-m3:567m'),
     'embedding_dimensions' => 1024,
     'similarity_threshold' => (float) env('CONCIERGE_SIMILARITY_THRESHOLD', 0.55),
-    'result_limit' => 5,
+    'result_limit' => (int) env('CONCIERGE_RESULT_LIMIT', 20),
 ];

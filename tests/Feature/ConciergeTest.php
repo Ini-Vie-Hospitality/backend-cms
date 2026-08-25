@@ -2,7 +2,9 @@
 
 use App\Models\Concierge\KnowledgeItem;
 use App\Models\User;
+use App\Services\Concierge\KnowledgeSearchService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Ai\Embeddings;
 
 uses(RefreshDatabase::class);
 
@@ -41,6 +43,24 @@ test('changing knowledge content clears its stale embedding', function () {
     $item->refresh()->update(['content' => 'Changed']);
 
     expect($item->refresh()->embedding)->toBeNull();
+});
+
+test('knowledge retrieval returns at most twenty candidates', function () {
+    foreach (range(1, 25) as $index) {
+        KnowledgeItem::query()->create([
+            'title' => "Knowledge {$index}",
+            'content' => "Published knowledge content {$index}.",
+            'embedding' => '[0.0]',
+            'status' => 'published',
+        ]);
+    }
+
+    Embeddings::fake(fn (): array => [array_fill(0, 1024, 0.0)]);
+
+    $results = app(KnowledgeSearchService::class)->search('published knowledge');
+
+    expect(config('concierge.result_limit'))->toBe(20)
+        ->and($results)->toHaveCount(20);
 });
 
 test('chat returns a safe handoff when no indexed knowledge exists', function () {
