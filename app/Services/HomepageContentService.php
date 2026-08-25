@@ -5,12 +5,14 @@ namespace App\Services;
 use App\Services\Homepage\Content\EditorialContentService;
 use App\Services\Homepage\Content\FooterContentService;
 use App\Services\Homepage\Content\NavigationContentService;
+use App\Services\Homepage\Content\PopupContentService;
 use App\Services\Homepage\Content\ShowcaseContentService;
 
 class HomepageContentService
 {
     public function __construct(
         private NavigationContentService $navigation,
+        private PopupContentService $popup,
         private ShowcaseContentService $showcases,
         private EditorialContentService $editorial,
         private FooterContentService $footer,
@@ -20,6 +22,7 @@ class HomepageContentService
     public function published(): array
     {
         return [
+            'popup' => $this->popup->popup(),
             'navbar' => $this->navigation->navbar(),
             'brandIntroduction' => $this->navigation->brandIntroduction(),
             'featuredProperties' => $this->showcases->featuredProperties(),

@@ -1,0 +1,124 @@
+name: Build and Deploy Backend
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-production-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: 43.133.155.164
+      DEPLOY_PORT: '22'
+      DEPLOY_USER: ian
+      DEPLOY_PASSWORD: ${{ secrets.DEPLOY_PASSWORD }}
+      DEPLOY_PATH: /var/www/ini-vie/backend-cms
+      DEPLOY_HOST_KEY: ${{ secrets.DEPLOY_HOST_KEY }}
+      SSHPASS: ${{ secrets.DEPLOY_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, bcmath, pdo_mysql, pdo_sqlite, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install PHP dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Prepare test environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          touch database/database.sqlite
+
+      - name: Generate Wayfinder routes
+        run: php artisan wayfinder:generate --with-form
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Run PHP quality checks
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/pint --test
+
+      - name: Run backend tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: php artisan test
+
+      - name: Build production assets
+        run: npm run build:ssr
+
+      - name: Prepare SSH client
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass
+          mkdir -p "$RUNNER_TEMP/ssh"
+          chmod 700 "$RUNNER_TEMP/ssh"
+          ssh-keyscan -p "$DEPLOY_PORT" -t ed25519 "$DEPLOY_HOST" > "$RUNNER_TEMP/ssh/known_hosts" 2>/dev/null
+          ACTUAL_HOST_KEY=$(ssh-keygen -lf "$RUNNER_TEMP/ssh/known_hosts" -E sha256 | awk '{print $2}')
+          test "$ACTUAL_HOST_KEY" = "$DEPLOY_HOST_KEY"
+
+      - name: Deploy backend to VPS
+        run: |
+          sshpass -e ssh -4 -p "$DEPLOY_PORT" \
+            -o ConnectTimeout=60 \
+            -o ServerAliveInterval=60 \
+            -o StrictHostKeyChecking=yes \
+            -o UserKnownHostsFile="$RUNNER_TEMP/ssh/known_hosts" \
+            "$DEPLOY_USER@$DEPLOY_HOST" bash -s -- "$DEPLOY_PATH" <<'REMOTE'
+          set -euo pipefail
+          APP_PATH="$1"
+          cd "$APP_PATH"
+
+          CURRENT_BRANCH="$(git branch --show-current)"
+          test "$CURRENT_BRANCH" = "master" || {
+            echo "Expected master checkout, found: $CURRENT_BRANCH" >&2
+            exit 1
+          }
+          test -z "$(git status --porcelain)" || {
+            echo "Dirty VPS checkout; deployment stopped for safety." >&2
+            exit 1
+          }
+
+          git fetch origin master
+          git reset --hard origin/master
+          composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+          npm ci
+          npm run build
+          php artisan migrate --force --no-interaction
+          php artisan optimize:clear
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
+
+          export PATH="$HOME/.hermes/node/bin:$PATH"
+          pm2 reload ini-vie-cms-web --update-env
+          pm2 reload ini-vie-cms-queue --update-env
+
+          curl --fail --silent --show-error --max-time 15 http://127.0.0.1:3302/up >/dev/null
+          curl --fail --silent --show-error --max-time 30 https://cms-inivie.iandev.my.id/ >/dev/null
+          REMOTE

@@ -11,6 +11,7 @@ class HomepageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'popup' => $this->section('popup', PopupResource::class, $request),
             'navbar' => $this->section('navbar', NavbarResource::class, $request),
             'brandIntroduction' => $this->section('brandIntroduction', BrandIntroductionResource::class, $request),
             'featuredProperties' => $this->section('featuredProperties', FeaturedPropertiesResource::class, $request),

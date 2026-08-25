@@ -6,6 +6,12 @@ return [
         'text_model' => env('COPILOT_TEXT_MODEL', env('CONCIERGE_DEEPSEEK_MODEL', 'deepseek-v4-flash')),
     ],
 
+    'google_analytics' => [
+        'property_id' => env('GOOGLE_ANALYTICS_PROPERTY_ID', '551482850'),
+        'credentials' => env('GOOGLE_ANALYTICS_CREDENTIALS'),
+        'cache_minutes' => (int) env('GOOGLE_ANALYTICS_CACHE_MINUTES', 5),
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Third Party Services

@@ -30,6 +30,7 @@ class HomepageWorkspaceTransferService
             ]],
             'homepage_footer_socials' => ['footer_id', []],
         ],
+        'homepage_popups' => [],
     ];
 
     /** @return array<string, array<int, array<string, mixed>>> */
