@@ -53,6 +53,11 @@ export function MembershipBenefitEditor({
     return (
         <form
             onSubmit={save}
+            action={
+                benefit
+                    ? '/cms/homepage/membership/benefits/' + benefit.id
+                    : '/cms/homepage/membership/benefits'
+            }
             className="grid gap-3 rounded-xl border bg-card p-4 shadow-[0_2px_8px_rgba(44,36,28,0.025)] md:grid-cols-4"
         >
             <Input

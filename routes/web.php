@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Cms\CopilotController;
 use App\Http\Controllers\Concierge\KnowledgeItemController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
 
 Route::middleware(['auth', 'verified'])->group(fn () => Route::inertia('dashboard', 'dashboard')->name('dashboard'));
+
+Route::middleware(['auth', 'verified'])->post('cms/copilot/generate', [CopilotController::class, 'generate'])->name('copilot.generate')->middleware('throttle:12,1');
 
 Route::middleware(['auth', 'verified'])->prefix('cms/concierge')->name('concierge.')->group(function (): void {
     Route::post('knowledge/reindex-all', [KnowledgeItemController::class, 'reindexAll'])->name('knowledge.reindex-all');
