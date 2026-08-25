@@ -115,6 +115,7 @@ Alternatif manual:
 php artisan serve
 php artisan queue:listen --tries=1
 npm run dev
+php artisan storage:link
 ```
 
 Build asset production:
