@@ -16,7 +16,6 @@ class WhatsNewSeeder extends HomepageSectionSeeder
             ['bali-honeymoon-packages', ['Bali Honeymoon Packages:', 'Best Options for Every Budget 2026'], 'Bali honeymoon packages usually come in options such as 3 days and 2 nights or 5 days and 4 nights. Most packages inc...', 'https://blog.inivie.com/wp-content/uploads/2026/08/honeymoon-package-bali.jpg'],
             ['hair-salons-in-ubud', ['Best Hair Salons in Ubud:', '12 Places for Cuts, Color and Spa'], 'Finding the best hair salon in Ubud is easier than it sounds, since the area is packed with tourist-friendly spots of...', 'https://blog.inivie.com/wp-content/uploads/2026/08/hair-treatment-at-salon.jpg'],
             ['nusa-penida-guide', ['Nusa Penida Guide:', 'Beaches, Boat Times and Trip Costs in Bali'], 'Dewata Island offers many attractions, including Nusa Penida. The island is located in Klungkung Regency, ~20 kilomet...', 'https://blog.inivie.com/wp-content/uploads/2025/11/NUSA-PENIDA.jpg'],
-            ['best-beach-clubs-in-bali', ['12 Best Beach Clubs in Bali:', 'Sunset, Dining and Daybeds'], 'From relaxed poolside afternoons to sunset dining, Bali beach clubs offer distinct settings for every kind of escape.', 'https://blog.inivie.com/wp-content/uploads/2025/11/beach-club-in-bali.jpg'],
         ];
 
         foreach ($stories as $index => [$key, $title, $description, $image]) {

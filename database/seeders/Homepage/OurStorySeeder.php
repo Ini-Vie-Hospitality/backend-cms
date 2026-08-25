@@ -37,7 +37,7 @@ class OurStorySeeder extends HomepageSectionSeeder
             [
                 'Sustainability',
                 'Sustainability is woven into the way iNi ViE Hospitality operates across Bali. We focus on responsible sourcing, reduced waste, efficient use of water and energy, local employment, community partnerships, and respect for Bali’s natural and cultural heritage, creating hospitality that benefits guests, people, and place.',
-                '/our-story/sustainability.jpg',
+                'https://inivie.com/inivie_assets/img/sustainability/10.webp',
                 'https://inivie.com/sustainability',
             ],
         ];
