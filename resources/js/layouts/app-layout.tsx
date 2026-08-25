@@ -14,7 +14,7 @@ export default function AppLayout({
             <AppLayoutTemplate breadcrumbs={breadcrumbs}>
                 {children}
             </AppLayoutTemplate>
-            <Toaster position="top-right" />
+            <Toaster mobileOffset="16px" position="top-right" />
         </>
     );
 }

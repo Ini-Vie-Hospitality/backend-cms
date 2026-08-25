@@ -32,12 +32,14 @@ export function AppSidebarHeader({
 
     return (
         <>
-            <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b border-border bg-background/95 px-6 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:px-4">
-                <div className="flex items-center gap-2">
+            <header className="flex min-h-14 shrink-0 flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-border bg-background/95 px-3 py-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:sm:min-h-12 sm:min-h-16 sm:flex-nowrap sm:px-4 sm:py-0 md:px-6">
+                <div className="flex min-w-0 flex-1 items-center gap-2 overflow-hidden">
                     <SidebarTrigger className="-ml-1" />
-                    <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    <div className="min-w-0 truncate">
+                        <Breadcrumbs breadcrumbs={breadcrumbs} />
+                    </div>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-2 max-sm:w-full max-sm:justify-end">
                     {workspace && (
                         <div className="flex rounded-lg border bg-card p-1">
                             <Button

@@ -56,8 +56,8 @@ export default function KnowledgeIndex({ items }: { items: Paginator }) {
                     </div>
                 </div>
 
-                <div className="overflow-hidden rounded-xl border bg-card">
-                    <table className="w-full text-sm">
+                <div className="overflow-x-auto rounded-xl border bg-card">
+                    <table className="w-full min-w-[680px] text-sm">
                         <thead className="bg-muted/50">
                             <tr>
                                 <th className="p-3 text-left">Title</th>
