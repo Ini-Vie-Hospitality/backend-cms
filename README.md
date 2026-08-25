@@ -24,7 +24,7 @@ Backend CMS dan API untuk Ini Vie Hospitality. Stack: Laravel 13, Inertia.js, Re
 - Composer
 - Node.js dan npm
 - Database Laravel; MariaDB direkomendasikan untuk pencarian vector RAG
-- Ollama untuk embedding lokal
+- Ollama untuk embedding, disediakan di luar Docker
 - Google Cloud project dengan Google Analytics Data API jika dashboard Analytics digunakan
 
 ## Setup Lokal
@@ -60,7 +60,7 @@ Salin `.env.example` menjadi `.env`, lalu sesuaikan nilai berikut.
 | `CONCIERGE_TEXT_PROVIDER` | Provider text AI Concierge |
 | `CONCIERGE_DEEPSEEK_MODEL` | Model DeepSeek Concierge |
 | `CONCIERGE_EMBEDDING_PROVIDER` | Provider embedding knowledge base |
-| `CONCIERGE_EMBEDDING_MODEL` | Model embedding, default `bge-m3` |
+| `CONCIERGE_EMBEDDING_MODEL` | Model embedding, default `bge-m3:567m` |
 | `CONCIERGE_SIMILARITY_THRESHOLD` | Ambang similarity, default `0.55` |
 | `CONCIERGE_RESULT_LIMIT` | Batas hasil pencarian, default `20` |
 | `GOOGLE_ANALYTICS_PROPERTY_ID` | ID property GA4 |
@@ -82,7 +82,7 @@ DB_USERNAME=root
 DB_PASSWORD=
 OLLAMA_URL=http://127.0.0.1:11434
 CONCIERGE_EMBEDDING_PROVIDER=ollama
-CONCIERGE_EMBEDDING_MODEL=bge-m3
+CONCIERGE_EMBEDDING_MODEL=bge-m3:567m
 ```
 
 ## Menjalankan Aplikasi
@@ -179,13 +179,13 @@ Alur RAG:
 
 MariaDB digunakan untuk pencarian vector cosine. Pada database non-MariaDB, sistem memakai fallback berupa item published yang dapat dicari dan dibatasi oleh `CONCIERGE_RESULT_LIMIT`.
 
-Jika memakai Ollama:
+Jika memakai Ollama, sediakan server di luar Docker lalu unduh model pada server tersebut:
 
 ```bash
-ollama pull bge-m3
+ollama pull bge-m3:567m
 ```
 
-Pastikan Ollama berjalan dan model embedding tersedia pada URL `OLLAMA_URL`.
+Pastikan Ollama berjalan dan dapat diakses dari backend melalui `OLLAMA_URL`; Docker tidak menjalankan atau mengunduh Ollama.
 
 API chat publik:
 
