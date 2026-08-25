@@ -10,9 +10,14 @@ export function KnowledgeForm({ title, action, item }: { title: string; action: 
     function submit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        if (item?.id) data.set('_method', 'PUT');
+
+        if (item?.id) {
+data.set('_method', 'PUT');
+}
+
         router.post(action, data, { forceFormData: true });
     }
+
     return (
         <>
             <Head title={title} />

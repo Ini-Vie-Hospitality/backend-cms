@@ -98,6 +98,47 @@ test('collection create update delete uses explicit relational columns', functio
     expect(DB::table('homepage_faq_items')->where('id', $item->id)->exists())->toBeFalse();
 });
 
+test('footer social links can be created updated and deleted', function () {
+    $user = User::factory()->create();
+    $payload = [
+        'label' => 'Instagram',
+        'href' => 'https://instagram.com/inivie',
+        'icon' => 'instagram',
+        'sort_order' => 10,
+        'is_active' => true,
+    ];
+
+    $this->actingAs($user)
+        ->get('/cms/homepage/footer')
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page->has('socials'));
+
+    $this->actingAs($user)
+        ->post('/cms/homepage/footer/socials', $payload)
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+
+    $social = DB::table('homepage_footer_socials')->where('label', 'Instagram')->latest('id')->first();
+
+    expect($social)->not->toBeNull();
+
+    $this->actingAs($user)
+        ->put("/cms/homepage/footer/socials/$social->id", [...$payload, 'label' => 'YouTube', 'href' => 'https://youtube.com/@inivie', 'icon' => 'youtube'])
+        ->assertRedirect()
+        ->assertSessionHasNoErrors();
+
+    expect(DB::table('homepage_footer_socials')->where('id', $social->id)->first())
+        ->label->toBe('YouTube')
+        ->href->toBe('https://youtube.com/@inivie')
+        ->icon->toBe('youtube');
+
+    $this->actingAs($user)
+        ->delete("/cms/homepage/footer/socials/$social->id")
+        ->assertRedirect();
+
+    expect(DB::table('homepage_footer_socials')->where('id', $social->id)->exists())->toBeFalse();
+});
+
 test('collection edit routes bind item before the default section parameter', function () {
     $user = User::factory()->create();
     $routes = [

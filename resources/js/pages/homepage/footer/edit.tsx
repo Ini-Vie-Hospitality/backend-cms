@@ -1,15 +1,20 @@
 import { StructuredForm } from '@/components/homepage/structured-form';
+import { SocialEditor } from './social-editor';
+import type { Social } from './social-editor';
 export default function FooterEdit({
     record,
+    socials = [],
 }: {
     record: Record<string, string>;
+    socials: Social[];
 }) {
     return (
-        <StructuredForm
-            title="Footer Settings"
-            action="/cms/homepage/footer"
-            record={record}
-            fields={[
+        <>
+            <StructuredForm
+                title="Footer Settings"
+                action="/cms/homepage/footer"
+                record={record}
+                fields={[
                 {
                     name: 'background_image',
                     label: 'Background image',
@@ -53,7 +58,15 @@ export default function FooterEdit({
                 { name: 'policy_label', label: 'Policy label' },
                 { name: 'policy_href', label: 'Policy redirect' },
                 { name: 'copyright', label: 'Copyright' },
-            ]}
-        />
+                ]}
+            />
+            <section className="w-full max-w-[1180px] space-y-4">
+                <div>
+                    <h2 className="font-serif text-2xl font-medium">Social Media</h2>
+                    <p className="mt-1 text-sm text-muted-foreground">Manage the social links shown in the public footer.</p>
+                </div>
+                {[...socials, undefined].map((social, index) => <SocialEditor key={social?.id ?? 'new'} social={social} index={index} />)}
+            </section>
+        </>
     );
 }

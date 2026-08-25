@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
 import { readFile } from 'node:fs/promises';
+import test from 'node:test';
 
 const source = await readFile(new URL('./dashboard.tsx', import.meta.url), 'utf8');
 
