@@ -42,7 +42,12 @@ Untuk database demo bersih:
 php artisan migrate:fresh --seed
 ```
 
-Seeder membuat akun awal `admin@gmail.com` dengan password `admin123`. Ganti atau hapus akun ini pada production.
+Seeder membuat akun admin awal:
+
+- Email: `admin@gmail.com`
+- Password: `admin123`
+
+Ganti password atau hapus akun ini pada production.
 
 ## Konfigurasi Environment
 
@@ -68,6 +73,17 @@ Salin `.env.example` menjadi `.env`, lalu sesuaikan nilai berikut.
 | `GOOGLE_ANALYTICS_CACHE_MINUTES` | Durasi cache Analytics, default `5` menit |
 | `COPILOT_TEXT_PROVIDER` | Provider text CMS Copilot |
 | `COPILOT_TEXT_MODEL` | Model text CMS Copilot |
+
+### Secret Frontend dan Backend
+
+Nilai kedua secret berikut wajib sama pada kedua aplikasi:
+
+| Backend CMS | Frontend Web |
+| --- | --- |
+| `backend-cms/.env:HOMEPAGE_PREVIEW_SECRET` | `frontend-web/.env:HOMEPAGE_PREVIEW_SECRET` |
+| `backend-cms/.env:FRONTEND_REVALIDATE_SECRET` | `frontend-web/.env:FRONTEND_REVALIDATE_SECRET` |
+
+Gunakan nilai acak yang kuat dan berbeda untuk setiap secret. Jika `HOMEPAGE_PREVIEW_SECRET` tidak sama, preview homepage gagal dan dapat menghasilkan `404`. Jika `FRONTEND_REVALIDATE_SECRET` tidak sama, request revalidation ditolak dengan `403 Forbidden` sehingga homepage dapat tetap menampilkan cache lama.
 
 Jangan commit `.env`, API key, atau JSON credential. Simpan credential Google di luar direktori public dan gunakan path melalui environment variable.
 
@@ -154,6 +170,17 @@ Konfigurasi Google Cloud:
 3. Berikan akses baca property GA4 kepada email service account.
 4. Simpan JSON credential di lokasi aman.
 5. Isi `GOOGLE_ANALYTICS_PROPERTY_ID` dan `GOOGLE_ANALYTICS_CREDENTIALS`.
+
+Konfigurasi project ini:
+
+```dotenv
+GOOGLE_ANALYTICS_PROPERTY_ID=551482850
+GOOGLE_ANALYTICS_CREDENTIALS=g4/ini-vie-c7ee54c100ce.json
+```
+
+`GOOGLE_ANALYTICS_PROPERTY_ID` menunjuk property GA4 yang dibaca dashboard. `GOOGLE_ANALYTICS_CREDENTIALS` adalah path relatif dari root `backend-cms`, sehingga contoh tersebut menunjuk ke `backend-cms/g4/ini-vie-c7ee54c100ce.json`. Email service account di dalam credential harus memiliki akses baca ke property GA4 tersebut.
+
+Simpan file JSON hanya di server backend. Jangan commit file credential, jangan menaruhnya dalam direktori `public`, dan jangan membagikannya ke frontend.
 
 Jika API atau credential gagal, dashboard menampilkan status unavailable secara aman tanpa menghentikan CMS.
 
