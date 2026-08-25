@@ -4,7 +4,7 @@ type Block = Record<string, string | number | null>;
 const fields = [
     { name: 'title', label: 'Title' },
     { name: 'description', label: 'Description', type: 'textarea' as const },
-    { name: 'image', label: 'Image', type: 'file' as const },
+    { name: 'image', label: 'Image', type: 'image' as const },
     { name: 'image_alt', label: 'Image alt text' },
     { name: 'cta_label', label: 'CTA label' },
     { name: 'href', label: 'Redirect URL' },

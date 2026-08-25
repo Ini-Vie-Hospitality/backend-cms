@@ -2,12 +2,13 @@
 
 namespace App\Services\Homepage;
 
+use App\Services\Homepage\Content\ContentMedia;
 use App\Support\HomepageDefinitions;
 use Illuminate\Support\Facades\DB;
 
 class HomepagePageService
 {
-    public function __construct(private HomepageWorkspaceContext $workspace) {}
+    public function __construct(private HomepageWorkspaceContext $workspace, private ContentMedia $media) {}
 
     /** @return array<string, mixed> */
     public function navbar(): array
@@ -25,7 +26,7 @@ class HomepagePageService
         $paragraphs = DB::table('homepage_brand_introduction_paragraphs')->orderBy('slot')->pluck('body')->all();
         $images = DB::table('homepage_brand_introduction_images')->orderBy('slot')->get();
 
-        return ['record' => [...get_object_vars($record), 'word_1' => $words[0] ?? '', 'word_2' => $words[1] ?? '', 'paragraph_1' => $paragraphs[0] ?? '', 'paragraph_2' => $paragraphs[1] ?? '', 'image_alt_1' => $images[0]->image_alt ?? '', 'image_alt_2' => $images[1]->image_alt ?? '', 'image_alt_3' => $images[2]->image_alt ?? '']];
+        return ['record' => [...get_object_vars($record), 'word_1' => $words[0] ?? '', 'word_2' => $words[1] ?? '', 'paragraph_1' => $paragraphs[0] ?? '', 'paragraph_2' => $paragraphs[1] ?? '', 'image_alt_1' => $images[0]->image_alt ?? '', 'image_alt_2' => $images[1]->image_alt ?? '', 'image_alt_3' => $images[2]->image_alt ?? '', 'image_1_url' => $this->media->url($images[0]->image_path ?? null), 'image_2_url' => $this->media->url($images[1]->image_path ?? null), 'image_3_url' => $this->media->url($images[2]->image_path ?? null)]];
     }
 
     /** @return array<string, mixed> */
@@ -44,7 +45,7 @@ class HomepagePageService
         if (isset($relations[$section])) {
             [$key, $table, $order] = $relations[$section];
             $foreignKey = in_array($table, ['homepage_membership_benefits'], true) ? 'membership_id' : (in_array($table, ['homepage_footer_contacts'], true) ? 'footer_id' : 'section_id');
-            $props[$key] = DB::table($table)->where($foreignKey, $record->id)->orderBy($order)->get();
+            $props[$key] = DB::table($table)->where($foreignKey, $record->id)->orderBy($order)->get()->each(fn (\stdClass $item) => $this->withImageUrl($item));
         }
         if ($section === 'wellness') {
             $props['categories'] = $this->workspace->root('homepage_wellness_categories')->orderBy('name')->get();
@@ -63,6 +64,15 @@ class HomepagePageService
         $record = DB::table($definition['table'])->where('section_id', $parentId)->where('id', $item)->first();
         if ($record === null) {
             abort(404);
+        }
+
+        return $this->withImageUrl($record);
+    }
+
+    private function withImageUrl(\stdClass $record): \stdClass
+    {
+        if (property_exists($record, 'image_path')) {
+            $record->image_url = $this->media->url($record->image_path);
         }
 
         return $record;

@@ -24,11 +24,11 @@ export default function BrandIntroductionEdit({
                     label: 'Story paragraph 2',
                     type: 'textarea',
                 },
-                { name: 'image_1', label: 'Image slot 1', type: 'file' },
+                { name: 'image_1', label: 'Image slot 1', type: 'image' },
                 { name: 'image_alt_1', label: 'Image 1 alt text' },
-                { name: 'image_2', label: 'Image slot 2', type: 'file' },
+                { name: 'image_2', label: 'Image slot 2', type: 'image' },
                 { name: 'image_alt_2', label: 'Image 2 alt text' },
-                { name: 'image_3', label: 'Image slot 3', type: 'file' },
+                { name: 'image_3', label: 'Image slot 3', type: 'image' },
                 { name: 'image_alt_3', label: 'Image 3 alt text' },
             ]}
         />

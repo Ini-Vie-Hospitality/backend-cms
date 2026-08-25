@@ -39,6 +39,7 @@ export function StructuredForm({
         <>
             <Head title={title} />
             <form
+                action={action}
                 onSubmit={submit}
                 className={cn(
                     'w-full max-w-[1180px] space-y-6 rounded-xl border bg-card p-6 shadow-[0_2px_8px_rgba(44,36,28,0.025)]',

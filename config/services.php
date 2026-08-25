@@ -1,6 +1,10 @@
 <?php
 
 return [
+    'copilot' => [
+        'text_provider' => env('COPILOT_TEXT_PROVIDER', env('CONCIERGE_TEXT_PROVIDER', 'deepseek')),
+        'text_model' => env('COPILOT_TEXT_MODEL', env('CONCIERGE_DEEPSEEK_MODEL', 'deepseek-v4-flash')),
+    ],
 
     /*
     |--------------------------------------------------------------------------

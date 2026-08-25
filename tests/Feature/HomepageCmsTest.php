@@ -120,6 +120,24 @@ test('file uploads use laravel public storage', function () {
     Storage::disk('public')->assertExists(DB::table('homepage_featured_properties')->where('name', 'Villa')->value('image_path'));
 });
 
+test('homepage cms pages expose image preview urls', function () {
+    $imagePath = 'homepage/preview.webp';
+    DB::table('homepage_brand_introduction_images')->orderBy('slot')->limit(1)->update(['image_path' => $imagePath]);
+    foreach (['homepage_featured_properties', 'homepage_culinary_destinations', 'homepage_wellness_escapes', 'homepage_journal_stories', 'homepage_featured_in_logos', 'homepage_story_blocks', 'homepage_special_offers'] as $table) {
+        DB::table($table)->limit(1)->update(['image_path' => $imagePath]);
+    }
+
+    $user = User::factory()->create();
+    $imageUrl = url('/storage/'.$imagePath);
+
+    $this->actingAs($user)->get('/cms/homepage/brand-introduction')->assertInertia(fn (Assert $page) => $page->where('record.image_1_url', $imageUrl));
+    foreach (['featured-properties', 'culinary', 'wellness', 'whats-new', 'featured-in'] as $section) {
+        $this->actingAs($user)->get("/cms/homepage/$section")->assertInertia(fn (Assert $page) => $page->where('items.0.image_url', $imageUrl));
+    }
+    $this->actingAs($user)->get('/cms/homepage/our-story')->assertInertia(fn (Assert $page) => $page->where('blocks.0.image_url', $imageUrl));
+    $this->actingAs($user)->get('/cms/homepage/special-offers')->assertInertia(fn (Assert $page) => $page->where('items.0.image_url', $imageUrl));
+});
+
 test('fixed story and offer slots have update routes but no create or delete routes', function () {
     $user = User::factory()->create();
     $block = DB::table('homepage_story_blocks')->first();
