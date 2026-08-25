@@ -7,16 +7,41 @@ type Props = {
     title: string;
     base: string;
     items: RecordData[];
-    columns: string[];
+    columns: Column[];
 };
+
+type Column =
+    | string
+    | {
+          key: string;
+          label: string;
+          type: 'image';
+          fit?: 'cover' | 'contain';
+      };
 
 function TableValue({
     column,
     value,
+    imageAlt,
+    imageFit,
 }: {
     column: string;
     value: RecordData[string];
+    imageAlt?: RecordData[string];
+    imageFit?: 'cover' | 'contain';
 }) {
+    if (column === 'image_url') {
+        return value ? (
+            <img
+                src={String(value)}
+                alt={String(imageAlt ?? '')}
+                className={`h-14 w-20 rounded-md border bg-muted ${imageFit === 'contain' ? 'object-contain' : 'object-cover'}`}
+            />
+        ) : (
+            <span className="text-muted-foreground">—</span>
+        );
+    }
+
     if (column !== 'status') {
         return String(value ?? '');
     }
@@ -46,8 +71,17 @@ export function CollectionTable({ title, base, items, columns }: Props) {
                     <thead className="bg-muted/70 text-xs tracking-[0.08em] text-muted-foreground uppercase">
                         <tr>
                             {columns.map((column) => (
-                                <th key={column} className="p-3 text-left">
-                                    {column.replaceAll('_', ' ')}
+                                <th
+                                    key={
+                                        typeof column === 'string'
+                                            ? column
+                                            : column.key
+                                    }
+                                    className="p-3 text-left"
+                                >
+                                    {typeof column === 'string'
+                                        ? column.replaceAll('_', ' ')
+                                        : column.label}
                                 </th>
                             ))}
                             <th className="p-3">Actions</th>
@@ -59,14 +93,27 @@ export function CollectionTable({ title, base, items, columns }: Props) {
                                 key={item.id}
                                 className="border-t transition-colors hover:bg-accent/70"
                             >
-                                {columns.map((column) => (
-                                    <td key={column} className="p-3">
-                                        <TableValue
-                                            column={column}
-                                            value={item[column]}
-                                        />
-                                    </td>
-                                ))}
+                                {columns.map((column) => {
+                                    const key =
+                                        typeof column === 'string'
+                                            ? column
+                                            : column.key;
+
+                                    return (
+                                        <td key={key} className="p-3">
+                                            <TableValue
+                                                column={key}
+                                                value={item[key]}
+                                                imageAlt={item.image_alt}
+                                                imageFit={
+                                                    typeof column === 'string'
+                                                        ? undefined
+                                                        : column.fit
+                                                }
+                                            />
+                                        </td>
+                                    );
+                                })}
                                 <td className="p-3 text-right">
                                     <a
                                         className="text-secondary-foreground underline decoration-brand-accent/45 underline-offset-4 hover:decoration-brand-accent"

@@ -31,7 +31,13 @@ export default function FeaturedPropertiesIndex({
                 title="Properties"
                 base="/cms/homepage/featured-properties/items"
                 items={items}
-                columns={['name', 'category', 'status', 'sort_order']}
+                columns={[
+                    { key: 'image_url', label: 'Image', type: 'image' },
+                    'name',
+                    'category',
+                    'status',
+                    'sort_order',
+                ]}
             />
         </>
     );

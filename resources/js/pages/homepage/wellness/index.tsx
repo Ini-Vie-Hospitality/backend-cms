@@ -29,7 +29,13 @@ export default function WellnessIndex({
                 title="Wellness Escapes"
                 base="/cms/homepage/wellness/items"
                 items={items}
-                columns={['name', 'location', 'status', 'sort_order']}
+                columns={[
+                    { key: 'image_url', label: 'Image', type: 'image' },
+                    'name',
+                    'location',
+                    'status',
+                    'sort_order',
+                ]}
             />
         </>
     );

@@ -36,7 +36,13 @@ export default function WhatsNewIndex({
                 title="Journal Stories"
                 base="/cms/homepage/whats-new/items"
                 items={items}
-                columns={['external_key', 'category', 'status', 'sort_order']}
+                columns={[
+                    { key: 'image_url', label: 'Image', type: 'image' },
+                    'external_key',
+                    'category',
+                    'status',
+                    'sort_order',
+                ]}
             />
         </>
     );

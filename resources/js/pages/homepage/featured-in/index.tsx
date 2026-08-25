@@ -21,7 +21,17 @@ export default function FeaturedInIndex({
                 title="Publication Logos"
                 base="/cms/homepage/featured-in/items"
                 items={items}
-                columns={['image_alt', 'status', 'sort_order']}
+                columns={[
+                    {
+                        key: 'image_url',
+                        label: 'Image',
+                        type: 'image',
+                        fit: 'contain',
+                    },
+                    'image_alt',
+                    'status',
+                    'sort_order',
+                ]}
             />
         </>
     );

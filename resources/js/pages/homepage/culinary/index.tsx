@@ -30,7 +30,13 @@ export default function CulinaryIndex({
                 title="Dining Destinations"
                 base="/cms/homepage/culinary/items"
                 items={items}
-                columns={['name', 'location', 'status', 'sort_order']}
+                columns={[
+                    { key: 'image_url', label: 'Image', type: 'image' },
+                    'name',
+                    'location',
+                    'status',
+                    'sort_order',
+                ]}
             />
         </>
     );
