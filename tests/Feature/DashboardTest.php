@@ -19,6 +19,17 @@ class DashboardTest extends TestCase
         $response->assertRedirect(route('login'));
     }
 
+    public function test_forwarded_https_requests_redirect_guests_to_https_login(): void
+    {
+        $response = $this->get(route('dashboard'), [
+            'X-Forwarded-Host' => 'cms-inivie.iandev.my.id',
+            'X-Forwarded-Port' => '443',
+            'X-Forwarded-Proto' => 'https',
+        ]);
+
+        $response->assertRedirect('https://cms-inivie.iandev.my.id/login');
+    }
+
     public function test_authenticated_users_receive_google_analytics_props(): void
     {
         $analytics = [
