@@ -89,7 +89,7 @@ export function CmsCopilotSidebar() {
         }
 
         const targets = context.targets.flatMap((target) => {
-            return Array.from(document.forms)
+            const actions = Array.from(document.forms)
                 .map(formActionPath)
                 .filter(Boolean)
                 .filter((action) =>
@@ -101,8 +101,15 @@ export function CmsCopilotSidebar() {
                                 `${actionPath(target.action_prefix)}/`,
                             )
                           : false,
-                )
-                .map((action) => ({ ...target, form_action: action }));
+                );
+
+            return actions.map((action, index) => ({
+                ...target,
+                label: target.action_prefix
+                    ? `${target.label} ${index + 1}`
+                    : target.label,
+                form_action: action,
+            }));
         });
 
         setAvailableTargets(targets);
